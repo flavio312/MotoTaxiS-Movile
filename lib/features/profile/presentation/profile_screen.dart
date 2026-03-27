@@ -71,12 +71,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
               const SizedBox(height: 28),
               ElevatedButton(
-                onPressed: () => context.go(AppRoutes.service),
-                child: const Text('Registrarse'),
+                onPressed: () => context.go(AppRoutes.address),
+                child: const Text('Continuar'),
               ),
               const SizedBox(height: 14),
               GestureDetector(
-                onTap: () => context.go(AppRoutes.register),
+                onTap: () => context.go(AppRoutes.login),
                 child: Text('Regresar',
                     style: GoogleFonts.poppins(fontSize: 14, color: AppColors.link,
                         fontWeight: FontWeight.w500)),

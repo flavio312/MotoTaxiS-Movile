@@ -92,7 +92,7 @@ class _AddressScreenState extends State<AddressScreen> {
                     ),
                     const SizedBox(height: 28),
                     ElevatedButton(
-                      onPressed: () => context.go(AppRoutes.profile),
+                      onPressed: () => context.go(AppRoutes.registerPerson),
                       child: const Text('Guardar'),
                     ),
                   ],

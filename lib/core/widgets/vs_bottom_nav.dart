@@ -14,14 +14,30 @@ class VsBottomNav extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _NavItem(icon: Icons.home_outlined, index: 0, current: currentIndex,
-              onTap: () => context.go(AppRoutes.service)),
-          _NavItem(icon: Icons.directions_car_outlined, index: 1, current: currentIndex,
-              onTap: () => context.go(AppRoutes.service)),
-          _NavItem(icon: Icons.receipt_outlined, index: 2, current: currentIndex,
-              onTap: () {}),
-          _NavItem(icon: Icons.person_add_alt_outlined, index: 3, current: currentIndex,
-              onTap: () => context.go(AppRoutes.address)),
+          _NavItem(
+            icon: Icons.home_outlined,
+            index: 0,
+            current: currentIndex,
+            onTap: () => context.go(AppRoutes.service),
+          ),
+          _NavItem(
+            icon: Icons.directions_car_outlined,
+            index: 1,
+            current: currentIndex,
+            onTap: () => context.go(AppRoutes.activeTrip),
+          ),
+          _NavItem(
+            icon: Icons.receipt_outlined,
+            index: 2,
+            current: currentIndex,
+            onTap: () => context.go(AppRoutes.history),
+          ),
+          _NavItem(
+            icon: Icons.person_add_alt_outlined,
+            index: 3,
+            current: currentIndex,
+            onTap: () => context.go(AppRoutes.settings),
+          ),
         ],
       ),
     );
@@ -33,16 +49,26 @@ class _NavItem extends StatelessWidget {
   final int index;
   final int current;
   final VoidCallback onTap;
-  const _NavItem({required this.icon, required this.index, required this.current, required this.onTap});
+
+  const _NavItem({
+    required this.icon,
+    required this.index,
+    required this.current,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final bool isActive = index == current;
     return InkWell(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        child: Icon(icon, size: 26,
-            color: index == current ? AppColors.navBarActive : AppColors.navBarInactive),
+        child: Icon(
+          icon,
+          size: 26,
+          color: isActive ? AppColors.navBarActive : AppColors.navBarInactive,
+        ),
       ),
     );
   }

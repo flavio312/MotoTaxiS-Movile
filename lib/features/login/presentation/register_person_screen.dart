@@ -6,14 +6,14 @@ import 'package:viajeseguro/core/theme/app_theme.dart';
 import 'package:viajeseguro/core/widgets/vs_logo_header.dart';
 import 'package:viajeseguro/core/widgets/vs_text_field.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class RegisterPersonScreen extends StatefulWidget {
+  const RegisterPersonScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<RegisterPersonScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends State<RegisterPersonScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nombresCtrl = TextEditingController();
   final _apellidoPCtrl = TextEditingController();
@@ -73,25 +73,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState?.validate() ?? false) {
-                      context.go(AppRoutes.address);
+                      context.go(AppRoutes.service);
                     }
                   },
-                  child: const Text('Continuar'),
+                  child: const Text('Registrar'),
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Ya tengo mi cuenta  ',
-                        style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textSecondary)),
-                    GestureDetector(
-                      onTap: () => context.go(AppRoutes.login),
-                      child: Text('Iniciar sesion',
-                          style: GoogleFonts.poppins(fontSize: 13, color: AppColors.link,
-                              fontWeight: FontWeight.w500)),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),

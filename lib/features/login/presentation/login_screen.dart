@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const TextSpan(text: 'Empieza tu viaje con nosotros,\nhaz clic aqui  '),
                       WidgetSpan(
                         child: GestureDetector(
-                          onTap: () => context.go(AppRoutes.register),
+                          onTap: () => context.go(AppRoutes.profile),
                           child: Text('Registrarse',
                               style: GoogleFonts.poppins(fontSize: 13, color: AppColors.link,
                                   fontWeight: FontWeight.w500)),
