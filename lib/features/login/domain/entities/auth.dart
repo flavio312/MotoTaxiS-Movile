@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class User extends Equatable{
+class Auth extends Equatable{
   final int idUsuario;
   final String nombreUsuario;
   final String password;
@@ -9,7 +9,7 @@ class User extends Equatable{
   final String fechaRegistro;
   final String? fotoPerfil;
 
-  const User({
+  const Auth({
     required this.idUsuario,
     required this.nombreUsuario,
     required this.password,
@@ -30,4 +30,3 @@ class User extends Equatable{
     fotoPerfil
   ];
 }
-

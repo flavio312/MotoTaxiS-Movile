@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:viajeseguro/core/route/app_navigation.dart';
 import 'package:viajeseguro/core/route/app_router.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 import 'package:viajeseguro/core/widgets/vs_bottom_nav.dart';
@@ -129,7 +130,7 @@ class ActiveTripScreen extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30)),
                         ),
-                        onPressed: () => context.go(AppRoutes.history),
+                        onPressed: () => AppNavigation.goToHistory(context),
                         child: Text('Cancelar servicio',
                             style: GoogleFonts.poppins(
                                 fontSize: 15, fontWeight: FontWeight.w600,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:viajeseguro/core/route/app_navigation.dart';
 import 'package:viajeseguro/core/route/app_router.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 import 'package:viajeseguro/core/widgets/vs_logo_header.dart';
@@ -73,7 +74,7 @@ class _RegisterScreenState extends State<RegisterPersonScreen> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState?.validate() ?? false) {
-                      context.go(AppRoutes.service);
+                      AppNavigation.goToService(context);
                     }
                   },
                   child: const Text('Registrar'),

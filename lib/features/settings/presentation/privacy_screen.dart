@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:viajeseguro/core/route/app_navigation.dart';
 import 'package:viajeseguro/core/route/app_router.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 
@@ -95,7 +96,7 @@ class PrivacyScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(30)),
                   minimumSize: const Size(double.infinity, 48),
                 ),
-                onPressed: () => context.go(AppRoutes.login),
+                onPressed: () => AppNavigation.goToLogin(context),
                 child: Text(
                   'Continuar',
                   style: GoogleFonts.poppins(

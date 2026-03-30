@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:viajeseguro/core/route/app_navigation.dart';
 import 'package:viajeseguro/core/route/app_router.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 import 'package:viajeseguro/core/widgets/vs_text_field.dart';
@@ -13,14 +14,14 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final _usernameCtrl = TextEditingController();
-  final _passCtrl = TextEditingController();
+  final _nombreUsuarioCtrl = TextEditingController();
+  final _passwordCtrl = TextEditingController();
   String _selectedRol = 'Pasajero';
 
   @override
   void dispose() {
-    _usernameCtrl.dispose();
-    _passCtrl.dispose();
+    _nombreUsuarioCtrl.dispose();
+    _passwordCtrl.dispose();
     super.dispose();
   }
 
@@ -51,9 +52,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: const Icon(Icons.person, size: 60, color: Colors.white),
               ),
               const SizedBox(height: 28),
-              VsTextField(label: 'Nombre de usuario', controller: _usernameCtrl),
+              VsTextField(label: 'Nombre de usuario', controller: _nombreUsuarioCtrl),
               const SizedBox(height: 14),
-              VsTextField(label: 'Contraseña', controller: _passCtrl, obscureText: true),
+              VsTextField(label: 'Contraseña', controller: _passwordCtrl, obscureText: true),
               const SizedBox(height: 20),
               Align(
                 alignment: Alignment.centerLeft,
@@ -71,12 +72,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
               const SizedBox(height: 28),
               ElevatedButton(
-                onPressed: () => context.go(AppRoutes.address),
+                onPressed: () => AppNavigation.goToAddress(context),
                 child: const Text('Continuar'),
               ),
               const SizedBox(height: 14),
               GestureDetector(
-                onTap: () => context.go(AppRoutes.login),
+                onTap: () => AppNavigation.goToLogin(context),
                 child: Text('Regresar',
                     style: GoogleFonts.poppins(fontSize: 14, color: AppColors.link,
                         fontWeight: FontWeight.w500)),

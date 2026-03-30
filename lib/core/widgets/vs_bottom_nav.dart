@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:viajeseguro/core/route/app_navigation.dart';
 import 'package:viajeseguro/core/route/app_router.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 
@@ -18,25 +19,25 @@ class VsBottomNav extends StatelessWidget {
             icon: Icons.home_outlined,
             index: 0,
             current: currentIndex,
-            onTap: () => context.go(AppRoutes.service),
+            onTap: () => AppNavigation.goToService(context),
           ),
           _NavItem(
             icon: Icons.directions_car_outlined,
             index: 1,
             current: currentIndex,
-            onTap: () => context.go(AppRoutes.activeTrip),
+            onTap: () => AppNavigation.goToActiveTrip(context),
           ),
           _NavItem(
             icon: Icons.receipt_outlined,
             index: 2,
             current: currentIndex,
-            onTap: () => context.go(AppRoutes.history),
+            onTap: () => AppNavigation.goToHistory(context),
           ),
           _NavItem(
             icon: Icons.person_add_alt_outlined,
             index: 3,
             current: currentIndex,
-            onTap: () => context.go(AppRoutes.settings),
+            onTap: () => AppNavigation.goToSettings(context),
           ),
         ],
       ),

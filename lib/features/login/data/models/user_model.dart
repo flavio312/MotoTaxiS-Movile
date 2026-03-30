@@ -1,6 +1,6 @@
-import '../../domain/entities/user.dart';
+import '../../domain/entities/auth.dart';
 
-class UserModel extends User{
+class UserModel extends Auth{
   const UserModel({
     required super.idUsuario,
     required super.nombreUsuario,
@@ -8,7 +8,7 @@ class UserModel extends User{
     required super.rol,
     required super.estadoCuenta,
     required super.fechaRegistro,
-    super.fotoPerfil
+    required super.fotoPerfil
   });
 
   factory UserModel.fromJson(Map<String, dynamic>json){
@@ -34,15 +34,15 @@ class UserModel extends User{
     };
   }
 
-  factory UserModel.fromEntity(User user){
+  factory UserModel.fromEntity(Auth auth){
     return UserModel(
-        idUsuario: user.idUsuario,
-        nombreUsuario: user.nombreUsuario,
-        password: user.password,
-        rol: user.rol,
-        estadoCuenta: user.estadoCuenta,
-        fechaRegistro: user.fechaRegistro,
-        fotoPerfil: user.fotoPerfil
+        idUsuario: auth.idUsuario,
+        nombreUsuario: auth.nombreUsuario,
+        password: auth.password,
+        rol: auth.rol,
+        estadoCuenta: auth.estadoCuenta,
+        fechaRegistro: auth.fechaRegistro,
+        fotoPerfil: auth.fotoPerfil
     );
   }
 }
