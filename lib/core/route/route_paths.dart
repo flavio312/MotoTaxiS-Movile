@@ -9,4 +9,14 @@ class RoutePaths {
   static const String rating = 'rating';
   static const String settings = '/settings';
   static const String privacy = 'privacy';
+
+  // --------Conductor-----------------
+
+  static const String registroConductor  = '/conductor/registro';
+  static const String homeConductor      = '/conductor/home';
+  static const String solicitudEntrante  = '/conductor/solicitud';
+  static const String viajeConductor     = '/conductor/viaje';
+  static const String evaluarUsuario     = '/conductor/evaluar';
+  static const String qrConductor        = '/conductor/qr';
+  static const String historialConductor = '/conductor/historial';
 }

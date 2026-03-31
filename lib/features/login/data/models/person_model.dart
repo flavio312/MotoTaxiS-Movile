@@ -14,7 +14,9 @@ class PersonModel extends Person{
 
   factory PersonModel.fromJson(Map<String, dynamic> json){
     return PersonModel(
-        idPersona: json ['idPersona'] is int ? json ['id'] : int.tryParse(json['id'].toString()) ?? 0,
+        idPersona: json['idPersona'] is int
+            ? json['idPersona']
+            : int.tryParse(json['idPersona'].toString()) ?? 0,
         nombre: json['nombre'] ?? '',
         apellidoP: json['apellidoP'] ?? '',
         apellidoM: json['apellidoM'] ?? '',

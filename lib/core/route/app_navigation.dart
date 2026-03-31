@@ -74,4 +74,27 @@ class AppNavigation {
   static void goToProfile(BuildContext context) {
     context.goNamed(RouteNames.profile);
   }
+  // --------Conductor-----------------
+  static void gotToRegistroConductor(BuildContext context) {
+    context.goNamed(RouteNames.registroConductor);
+  }
+  static void gotToHomeConductor(BuildContext context) {
+    context.goNamed(RouteNames.homeConductor);
+  }
+  static void gotToSolicitudEntrante(BuildContext context) {
+    context.goNamed(RouteNames.solicitudEntrante);
+  }
+  static void gotToViajeConductor(BuildContext context) {
+    context.goNamed(RouteNames.viajeConductor);
+  }
+  static void gotToEvaluarUsuario(BuildContext context) {
+    context.goNamed(RouteNames.evaluarUsuario);
+  }
+  static void gotToQrConductor(BuildContext context) {
+    context.goNamed(RouteNames.qrConductor);
+  }
+  static void gotToHistorialConductor(BuildContext context) {
+    context.goNamed(RouteNames.historialConductor);
+  }
+
 }

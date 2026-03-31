@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/auth.dart';
+import '../../domain/entities/person.dart';
 import '../../domain/repositories/auth.dart';
 import '../datasource/auth_local_datasource.dart';
 import '../datasource/auth_remote_datasource.dart';
@@ -100,6 +101,62 @@ class AuthRepositoryImpl implements AuthRepository {
       return Right(token != null && token.isNotEmpty);
     } catch (e) {
       return const Right(false);
+    }
+  }
+
+  @override
+  Future<Either<Failure, Auth>> register(
+      String nombreUsuario,
+      String password,
+      String rol,
+      String estadoCuenta,
+      String fechaRegistro,
+      String fotoPerfil) async {
+    try {
+      final response = await remoteDataSource.register(
+        nombreUsuario: nombreUsuario,
+        password: password,
+        rol: rol,
+        estadoCuenta: estadoCuenta,
+        fechaRegistro: fechaRegistro,
+        fotoPerfil: fotoPerfil,
+      );
+
+      await localDataSource.cacheToken(response.token);
+
+      return Right(response.user);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Person>> createPerson(
+      String nombre,
+      String apellidoP,
+      String apellidoM,
+      String idSexo,
+      String correoElectronico,
+      String telefono,
+      String fechaNacimiento) async {
+    try {
+      final response = await remoteDataSource.createPerson(
+        nombre: nombre,
+        apellidoP: apellidoP,
+        apellidoM: apellidoM,
+        idSexo: idSexo,
+        correoElectronico: correoElectronico,
+        telefono: telefono,
+        fechaNacimiento: fechaNacimiento,
+      );
+
+      return Right(response);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
     }
   }
 }

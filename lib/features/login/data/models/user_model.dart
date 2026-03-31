@@ -13,8 +13,8 @@ class UserModel extends Auth{
 
   factory UserModel.fromJson(Map<String, dynamic>json){
     return UserModel(
-        idUsuario: json["idUsuario"] is int ? json['idUsuario'] : int.tryParse(json['id'].toString()) ?? 0,
-        nombreUsuario: json['nombreUsuario'] ?? json['nombreUsuario'] ?? '',
+        idUsuario: json["idUsuario"] is int ? json['idUsuario'] : int.tryParse(json['idUsuario'].toString()) ?? 0,
+        nombreUsuario: json['nombreUsuario'] ?? '',
         password: json['password'] ?? '',
         rol: json['rol'] ?? '',
         estadoCuenta: json['estadoCuenta'] ?? '',
@@ -27,7 +27,6 @@ class UserModel extends Auth{
     return{
       'idUsuario':idUsuario,
       'nombreUsuario':nombreUsuario,
-      'password':password,
       'rol':rol,
       'estadoCuenta':estadoCuenta,
       'fechaRegistro':fechaRegistro

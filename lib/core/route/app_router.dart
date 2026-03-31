@@ -11,6 +11,14 @@ import 'package:viajeseguro/features/trip/presentation/active_trip_screen.dart';
 import 'package:viajeseguro/features/rating/presentation/rating_screen.dart';
 import 'package:viajeseguro/features/settings/presentation/settings_screen.dart';
 import 'package:viajeseguro/features/settings/presentation/privacy_screen.dart';
+// --------CONDUCTOR-----------
+import '../../features/conductor/presentation/page/registro_conductor_screen.dart';
+import '../../features/conductor/presentation/page/home_conductor_screen.dart';
+import '../../features/conductor/presentation/page/evaluar_usuario_screen.dart';
+import '../../features/conductor/presentation/page/qr_conductor_screen.dart';
+import '../../features/conductor/presentation/page/historial_conductor_screen.dart';
+import '../../features/conductor/presentation/page/solicitud_entrante_screen.dart';
+import '../../features/conductor/presentation/page/viaje_conductor_screen.dart';
 import '../widgets/error_page.dart';
 import 'route_names.dart';
 import 'route_paths.dart';
@@ -103,6 +111,42 @@ class AppRouter {
           ),
         ],
       ),
+      // --------Conductor-----------------
+      GoRoute(
+        path: RoutePaths.registroConductor,
+        name: RouteNames.registroConductor,
+        builder: (context, state) => const RegistroConductorScreen(),
+      ),
+      GoRoute(
+        path:RoutePaths.homeConductor,
+        name: RouteNames.homeConductor,
+        builder: (context, state) => const HomeConductorScreen(),
+      ),
+      GoRoute(
+        path: RoutePaths.solicitudEntrante,
+        name: RouteNames.solicitudEntrante,
+        builder: (context, state) => const SolicitudEntranteScreen(),
+      ),
+      GoRoute(
+        path: RoutePaths.viajeConductor,
+        name: RouteNames.viajeConductor,
+        builder: (context, state) => const ViajeConductorScreen(),
+      ),
+      GoRoute(
+        path: RoutePaths.evaluarUsuario,
+        name: RouteNames.evaluarUsuario,
+        builder: (context, state) => const EvaluarUsuarioScreen(),
+      ),
+      GoRoute(
+        path: RoutePaths.qrConductor,
+        name: RouteNames.qrConductor,
+        builder: (context, state) => const QrConductorScreen(),
+      ),
+      GoRoute(
+        path: RoutePaths.historialConductor,
+        name: RouteNames.historialConductor,
+        builder: (context, state) => const HistorialConductorScreen(),
+      )
     ],
     errorBuilder: (context, state) => ErrorPage(error: state.error),
   );

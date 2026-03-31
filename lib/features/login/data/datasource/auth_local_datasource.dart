@@ -30,12 +30,8 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   }
 
   @override
-  Future<String?> getToken() async {
-    try {
-      return sharedPreferences.getString(TOKEN_KEY);
-    } catch (e) {
-      throw CacheException(e.toString());
-    }
+  Future<String?> getToken() {
+    return Future.value(sharedPreferences.getString(TOKEN_KEY));
   }
 
   @override
