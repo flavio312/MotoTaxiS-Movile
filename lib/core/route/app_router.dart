@@ -19,6 +19,13 @@ import '../../features/conductor/presentation/page/qr_conductor_screen.dart';
 import '../../features/conductor/presentation/page/historial_conductor_screen.dart';
 import '../../features/conductor/presentation/page/solicitud_entrante_screen.dart';
 import '../../features/conductor/presentation/page/viaje_conductor_screen.dart';
+// ------Propietario
+import '../../features/propietario/presentation/pages/registro_propietario_screen.dart';
+import '../../features/propietario/presentation/pages/home_propietario_screen.dart';
+import '../../features/propietario/presentation/pages/detalle_vehiculo_screen.dart';
+import '../../features/propietario/presentation/pages/asignar_vehiculo_screen.dart';
+import '../../features/propietario/presentation/pages/agregar_vehiculo_screen.dart';
+import '../../features/propietario/presentation/pages/escanear_qr_screen.dart';
 import '../widgets/error_page.dart';
 import 'route_names.dart';
 import 'route_paths.dart';
@@ -146,7 +153,37 @@ class AppRouter {
         path: RoutePaths.historialConductor,
         name: RouteNames.historialConductor,
         builder: (context, state) => const HistorialConductorScreen(),
-      )
+      ),
+      // --Propietario
+      GoRoute(
+        path: RoutePaths.registroPropietario,
+        name: RouteNames.registroPropietario,
+        builder: (context, state) => const RegistroPropietarioScreen(),
+      ),
+      GoRoute(path: RoutePaths.homePropietario,
+        name: RouteNames.homePropietario,
+        builder: (context, state) => const HomePropietarioScreen(),
+      ),
+      GoRoute(
+          path: RoutePaths.detalleVehiculo,
+          name: RouteNames.detalleVehiculo,
+          builder: (context, state) => const DetalleVehiculoScreen()
+      ),
+      GoRoute(
+          path: RoutePaths.asignarVehiculo,
+          name: RouteNames.asignarVehiculo,
+          builder: (context, state) => const AsignarVehiculoScreen()
+      ),
+      GoRoute(
+          path: RoutePaths.agregarVehiculo,
+          name: RouteNames.agregarVehiculo,
+          builder: (context, state) => const AgregarVehiculoScreen()
+      ),
+      GoRoute(
+          path: RoutePaths.escanearQr,
+          name: RouteNames.escanearQr,
+          builder: (context, state) => const EscanearQrScreen()
+      ),
     ],
     errorBuilder: (context, state) => ErrorPage(error: state.error),
   );

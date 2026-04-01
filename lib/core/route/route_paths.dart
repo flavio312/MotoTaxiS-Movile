@@ -19,4 +19,14 @@ class RoutePaths {
   static const String evaluarUsuario     = '/conductor/evaluar';
   static const String qrConductor        = '/conductor/qr';
   static const String historialConductor = '/conductor/historial';
+
+// --------Propietario-----------------
+
+  static const String registroPropietario  = '/propietario/registro';
+  static const String homePropietario      = '/propietario/home';
+  static const String agregarVehiculo      = '/propietario/agregar';
+  static const String detalleVehiculo      = '/propietario/detalle';
+  static const String asignarVehiculo      = '/propietario/asignar';
+  static const String escanearQr           = '/propietario/escanear';
+
 }

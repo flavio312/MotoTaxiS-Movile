@@ -44,15 +44,12 @@ class AppNavigation {
   static void goToLogin(BuildContext context) {
     context.goNamed(RouteNames.login);
   }
-
   static void goToRegister(BuildContext context) {
     context.goNamed(RouteNames.registerPerson);
   }
-
   static void goToService(BuildContext context) {
     context.goNamed(RouteNames.service);
   }
-
   static void goToHistory(BuildContext context) {
     context.goNamed(RouteNames.history);
   }
@@ -96,5 +93,23 @@ class AppNavigation {
   static void gotToHistorialConductor(BuildContext context) {
     context.goNamed(RouteNames.historialConductor);
   }
-
+  // Propietatio
+  static void gotToRegistroPropietario(BuildContext context) {
+    context.goNamed(RouteNames.registroPropietario);
+  }
+  static void gotToHomePropietario(BuildContext context) {
+    context.goNamed(RouteNames.homePropietario);
+  }
+  static void gotToAgregarVehiculo(BuildContext context) {
+    context.goNamed(RouteNames.agregarVehiculo);
+  }
+  static void gotToDetalleVehiculo(BuildContext context) {
+    context.goNamed(RouteNames.detalleVehiculo);
+  }
+  static void gotToAsignarVehiculo(BuildContext context) {
+    context.goNamed(RouteNames.asignarVehiculo);
+  }
+  static void gotToEscanearQr(BuildContext context) {
+    context.goNamed(RouteNames.escanearQr);
+  }
 }
