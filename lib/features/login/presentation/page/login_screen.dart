@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter/gestures.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:viajeseguro/core/route/app_navigation.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
@@ -95,13 +95,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textSecondary),
                     children: [
                       const TextSpan(text: 'Empieza tu viaje con nosotros,\nhaz clic aqui  '),
-                      WidgetSpan(
-                        child: GestureDetector(
-                          onTap: () => AppNavigation.goToRegister(context),
-                          child: Text('Registrarse',
-                              style: GoogleFonts.poppins(fontSize: 13, color: AppColors.link,
-                                  fontWeight: FontWeight.w500)),
+                      TextSpan(
+                        text: 'Registrarse',
+                        style: GoogleFonts.poppins(
+                          fontSize: 13,
+                          color: AppColors.link,
+                          fontWeight: FontWeight.w500,
                         ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => AppNavigation.goToProfile(context),
                       ),
                     ],
                   ),

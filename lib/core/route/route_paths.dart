@@ -2,6 +2,7 @@ class RoutePaths {
   static const String login = '/';
   static const String registerPerson = '/registerPerson';
   static const String address = '/address';
+  static const String historialaddress = '/historialaddress';
   static const String profile = '/profile';
   static const String service = '/service';
   static const String history = 'history';

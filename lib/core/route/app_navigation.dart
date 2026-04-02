@@ -68,6 +68,9 @@ class AppNavigation {
   static void goToAddress(BuildContext context) {
     context.goNamed(RouteNames.address);
   }
+  static void goToHistorialAddress(BuildContext context) {
+    context.goNamed(RouteNames.historialaddress);
+  }
   static void goToProfile(BuildContext context) {
     context.goNamed(RouteNames.profile);
   }

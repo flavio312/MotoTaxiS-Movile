@@ -4,6 +4,7 @@ import 'package:viajeseguro/features/login/presentation/providers/auth_provider.
 import 'package:viajeseguro/features/login/presentation/page/login_screen.dart';
 import 'package:viajeseguro/features/login/presentation/page/register_person_screen.dart';
 import 'package:viajeseguro/features/addres/screens/addres_screen.dart';
+import 'package:viajeseguro/features/direcciones/presentation/historial_direcciones_screen.dart';
 import 'package:viajeseguro/features/profile/presentation/page/profile_screen.dart';
 import 'package:viajeseguro/features/service/presentation/service_sreen.dart';
 import 'package:viajeseguro/features/history/presentation/history_screen.dart';
@@ -183,6 +184,11 @@ class AppRouter {
           path: RoutePaths.escanearQr,
           name: RouteNames.escanearQr,
           builder: (context, state) => const EscanearQrScreen()
+      ),
+      GoRoute(
+        path: RoutePaths.historialaddress,
+        name: RouteNames.historialaddress,
+        builder: (context, state) => const HistorialDireccionesScreen(),
       ),
     ],
     errorBuilder: (context, state) => ErrorPage(error: state.error),
