@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+
 import 'package:viajeseguro/features/login/presentation/providers/auth_provider.dart';
 import 'package:viajeseguro/features/login/presentation/page/login_screen.dart';
 import 'package:viajeseguro/features/login/presentation/page/register_person_screen.dart';
-import 'package:viajeseguro/features/addres/screens/addres_screen.dart';
-import 'package:viajeseguro/features/direcciones/presentation/historial_direcciones_screen.dart';
+import 'package:viajeseguro/features/addres/presentation/screens/addres_screen.dart';
+import 'package:viajeseguro/features/direcciones/presentation/page/historial_direcciones_screen.dart';
 import 'package:viajeseguro/features/profile/presentation/page/profile_screen.dart';
-import 'package:viajeseguro/features/service/presentation/service_sreen.dart';
-import 'package:viajeseguro/features/history/presentation/history_screen.dart';
-import 'package:viajeseguro/features/trip/presentation/active_trip_screen.dart';
-import 'package:viajeseguro/features/rating/presentation/rating_screen.dart';
-import 'package:viajeseguro/features/settings/presentation/settings_screen.dart';
-import 'package:viajeseguro/features/settings/presentation/privacy_screen.dart';
+import 'package:viajeseguro/features/service/presentation/page/service_sreen.dart';
+import 'package:viajeseguro/features/history/presentation/page/history_screen.dart';
+import 'package:viajeseguro/features/trip/presentation/page/active_trip_screen.dart';
+import 'package:viajeseguro/features/rating/presentation/page/rating_screen.dart';
+import 'package:viajeseguro/features/settings/presentation/page/settings_screen.dart';
+import 'package:viajeseguro/features/settings/presentation/page/privacy_screen.dart';
 // --------CONDUCTOR-----------
 import '../../features/conductor/presentation/page/registro_conductor_screen.dart';
 import '../../features/conductor/presentation/page/home_conductor_screen.dart';

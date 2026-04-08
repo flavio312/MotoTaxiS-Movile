@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:viajeseguro/core/route/app_navigation.dart';
-import 'package:viajeseguro/core/route/app_router.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 import 'package:viajeseguro/core/widgets/vs_bottom_nav.dart';
 
@@ -67,7 +66,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   const Divider(height: 1, thickness: 1, color: Color(0xFFEEEEEE)),
-                  // Cerrar sesion
+
                   InkWell(
                     onTap: () => AppNavigation.goToLogin(context),
                     child: Padding(

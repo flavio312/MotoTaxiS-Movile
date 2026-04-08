@@ -25,23 +25,17 @@ class AuthRepositoryImpl implements AuthRepository {
         password: password,
       );
 
-      print('Repository: Intentando login...');
       final response = await remoteDataSource.login(request);
 
-      print('Repository: Login exitoso, guardando token y usuario...');
       await localDataSource.cacheToken(response.token);
       await localDataSource.cacheUser(response.user);
 
-      print('Repository: Usuario guardado: ${response.user.nombreUsuario}');
       return Right(response.user);
     } on ServerException catch (e) {
-      print('Repository: Error de servidor: ${e.message}');
       return Left(ServerFailure(e.message));
     } on NetworkException catch (e) {
-      print('Repository: Error de red: ${e.message}');
       return Left(NetworkFailure(e.message));
     } catch (e) {
-      print('Repository: Error inesperado: $e');
       return Left(ServerFailure(e.toString()));
     }
   }
@@ -66,30 +60,23 @@ class AuthRepositoryImpl implements AuthRepository {
       // Primero intentar obtener del caché
       final cachedUser = await localDataSource.getCachedUser();
       if (cachedUser != null) {
-        print('Repository: Usuario obtenido del caché');
         return Right(cachedUser);
       }
 
       // Si no hay caché, intentar obtener del servidor
       final token = await localDataSource.getToken();
       if (token == null) {
-        print('Repository: No hay token');
         return const Left(CacheFailure('No token found'));
       }
-
-      print('Repository: Obteniendo usuario del servidor...');
       final user = await remoteDataSource.getCurrentUser(token);
       await localDataSource.cacheUser(user);
 
       return Right(user);
     } on ServerException catch (e) {
-      print('Repository: Error obteniendo usuario: ${e.message}');
       return Left(ServerFailure(e.message));
     } on CacheException catch (e) {
-      print('Repository: Error de caché: ${e.message}');
       return Left(CacheFailure(e.message));
     } catch (e) {
-      print('Repository: Error inesperado: $e');
       return Left(ServerFailure(e.toString()));
     }
   }
