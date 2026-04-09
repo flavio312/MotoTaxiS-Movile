@@ -11,7 +11,11 @@ import 'package:viajeseguro/features/login/domain/usecase/get_current.dart';
 import 'package:viajeseguro/features/login/domain/usecase/login_user.dart';
 import 'package:viajeseguro/features/login/domain/usecase/logout_user.dart';
 import 'package:viajeseguro/features/login/presentation/providers/auth_provider.dart';
-
+import 'package:viajeseguro/features/login/presentation/providers/person_provider.dart';
+import 'package:viajeseguro/features/login/data/datasource/person_datasource.dart';
+import 'package:viajeseguro/features/login/data/repositories/person_repository_impl.dart';
+import 'package:viajeseguro/features/login/domain/usecase/register_person.dart';
+import 'package:viajeseguro/core/network/api_config.dart';
 import 'myapp.dart';
 
 Future<void> main() async {
@@ -52,8 +56,20 @@ Future<void> main() async {
             getCurrentUserUseCase: getCurrentUser,
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) => PersonProvider(
+            registerPersonUseCase: RegisterPerson(
+              PersonRepositoryImpl(
+                datasource: PersonDatasource(
+                  httpClient: ApiConfig.httpClient,
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
       child: const Myapp(),
     ),
+
   );
 }

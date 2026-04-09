@@ -49,13 +49,14 @@ class AppRouter {
 
       final isLogin = state.matchedLocation == RoutePaths.login;
       final isRegister = state.matchedLocation == RoutePaths.registerPerson;
+      final isProfile = state.matchedLocation == RoutePaths.profile;
 
       if (isLoading) {
         return isLogin ? null : RoutePaths.login;
       }
 
       if (!isAuthenticated) {
-        if (isLogin || isRegister) return null;
+        if (isLogin || isRegister || isProfile) return null;
         return RoutePaths.login;
       }
 
