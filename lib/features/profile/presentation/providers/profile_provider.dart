@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import '../../domain/entities/profile.dart';
 import '../../domain/usecases/create_user.dart';
+import 'package:viajeseguro/core/network/auth_service.dart';
 
 class ProfileProvider extends ChangeNotifier {
   final CreateUser createUserUseCase;
+  final AuthService _authService = AuthService();
 
   ProfileProvider({required this.createUserUseCase});
 
@@ -18,6 +21,11 @@ class ProfileProvider extends ChangeNotifier {
   String? get token => _token;
   File? get selectedImage => _selectedImage;
 
+  String? get roleFromToken {
+    if (_token == null) return null;
+    final decoded = JwtDecoder.decode(_token!);
+    return decoded['rol'];
+  }
   /// Permite actualizar la imagen seleccionada desde cámara o galería
   void setImage(File? image) {
     _selectedImage = image;
