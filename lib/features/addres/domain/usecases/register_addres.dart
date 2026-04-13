@@ -3,7 +3,7 @@ import '../repositories/addres_repository.dart';
 class RegisterAddres{
   final AddresRepository repository;
 
-  RegisterAddres(this.repository);
+  RegisterAddres({required this.repository});
 
   Future<void> call ({
     required Map<String, dynamic> data,

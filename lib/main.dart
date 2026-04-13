@@ -24,6 +24,11 @@ import 'package:viajeseguro/features/profile/presentation/providers/profile_prov
 import 'package:viajeseguro/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:viajeseguro/features/profile/data/datasource/profile_datasource.dart';
 
+import 'package:viajeseguro/features/addres/data/datasource/addres_datasource.dart';
+import 'package:viajeseguro/features/addres/data/repositories/addres_repository_impl.dart';
+import 'package:viajeseguro/features/addres/domain/usecases/register_addres.dart';
+import 'package:viajeseguro/features/addres/presentation/providers/addres_providers.dart';
+
 import 'myapp.dart';
 
 Future<void> main() async {
@@ -61,6 +66,12 @@ Future<void> main() async {
   );
   final createUser = CreateUser(repository: profileRepository);
 
+  // Address setup
+  final addresRepository = AddresRepositoryImpl(
+    datasource: AddresDatasource(httpClient: ApiConfig.httpClient),
+  );
+  final registerAddres = RegisterAddres(repository: addresRepository);
+
   runApp(
     MultiProvider(
       providers: [
@@ -79,6 +90,11 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (_) => ProfileProvider(
             createUserUseCase: createUser,
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AddresProvider(
+            registerAddresUseCase: registerAddres,
           ),
         ),
       ],

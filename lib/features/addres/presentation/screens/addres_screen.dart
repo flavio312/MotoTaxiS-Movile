@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:viajeseguro/core/route/app_navigation.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 import 'package:viajeseguro/core/widgets/vs_text_field.dart';
+import 'package:viajeseguro/features/profile/presentation/providers/profile_provider.dart';
+import '../providers/addres_providers.dart';
 
 class AddressScreen extends StatefulWidget {
   const AddressScreen({super.key});
@@ -17,12 +21,13 @@ class _AddressScreenState extends State<AddressScreen> {
   final _calleCtrl = TextEditingController();
   final _exteriorCtrl = TextEditingController();
   final _interiorCtrl = TextEditingController();
+  final _latitudCtrl = TextEditingController();
+  final _longitudCtrl = TextEditingController();
 
   String? _selectedEstado = 'Chiapas';
   String? _selectedMunicipio;
   String? _selectedAsentamiento;
 
-  // Listas tipadas explícitamente
   final List<String> municipios = ['Tumbalá', 'Palenque', 'San Cristóbal de las Casas'];
   final Map<String, List<String>> asentamientos = {
     'Tumbalá': ['Centro', 'San Pedro'],
@@ -37,7 +42,30 @@ class _AddressScreenState extends State<AddressScreen> {
     _calleCtrl.dispose();
     _exteriorCtrl.dispose();
     _interiorCtrl.dispose();
+    _latitudCtrl.dispose();
+    _longitudCtrl.dispose();
     super.dispose();
+  }
+
+  Future<Position> _getCurrentPosition() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      throw Exception('Los servicios de ubicación están deshabilitados.');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        throw Exception('Permiso de ubicación denegado.');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      throw Exception('Permiso de ubicación denegado permanentemente.');
+    }
+
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
   @override
@@ -141,22 +169,78 @@ class _AddressScreenState extends State<AddressScreen> {
                                 label: 'Interior', controller: _interiorCtrl)),
                       ],
                     ),
+                    const SizedBox(height: 12),
+                    Text('Coordenadas',
+                        style: GoogleFonts.poppins(
+                            fontSize: 12, color: AppColors.textSecondary)),
+                    Row(
+                      children: [
+                        Expanded(
+                            child: VsTextField(
+                                label: 'Latitud', controller: _latitudCtrl)),
+                        const SizedBox(width: 10),
+                        Expanded(
+                            child: VsTextField(
+                                label: 'Longitud', controller: _longitudCtrl)),
+                      ],
+                    ),
                     const SizedBox(height: 28),
                     ElevatedButton(
-                      onPressed: () {
-                        // Aquí puedes armar tu JSON para enviar al backend
-                        final direccion = {
-                          "estado": _selectedEstado,
-                          "municipio": _selectedMunicipio,
-                          "asentamiento": _selectedAsentamiento,
-                          "codigoPostal": _cpCtrl.text,
-                          "calle": _calleCtrl.text,
-                          "numeroExterior": _exteriorCtrl.text,
-                          "numeroInterior": _interiorCtrl.text,
-                          "tipoDireccion": _tipoDireccionCtrl.text,
-                        };
-                        print(direccion); // temporal, luego lo mandas al backend
-                        AppNavigation.goToRegister(context);
+                      onPressed: context.watch<AddresProvider>().isLoading
+                          ? null
+                          : () async {
+                        // Validaciones
+                        if (_selectedMunicipio == null ||
+                            _selectedAsentamiento == null ||
+                            _cpCtrl.text.isEmpty ||
+                            _calleCtrl.text.isEmpty ||
+                            _exteriorCtrl.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Completa todos los campos')),
+                          );
+                          return;
+                        }
+
+                        try {
+                          final position = await _getCurrentPosition();
+                          _latitudCtrl.text = position.latitude.toString();
+                          _longitudCtrl.text = position.longitude.toString();
+
+                          final direccionData = {
+                            "estado": _selectedEstado,
+                            "municipio": _selectedMunicipio,
+                            "asentamiento": _selectedAsentamiento,
+                            "codigoPostal": _cpCtrl.text,
+                            "calle": _calleCtrl.text,
+                            "numeroExterior": _exteriorCtrl.text,
+                            "numeroInterior": _interiorCtrl.text,
+                            "tipoDireccion": _tipoDireccionCtrl.text,
+                            "latitud": position.latitude,
+                            "longitud": position.longitude,
+                          };
+
+                          final token = context.read<ProfileProvider>().token ?? '';
+                          await context.read<AddresProvider>().saveAddress(
+                              data: direccionData, token: token);
+
+                          if (!mounted) return;
+
+                          final provider = context.read<AddresProvider>();
+                          if (provider.success) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('¡Dirección guardada con éxito!')),
+                            );
+                            AppNavigation.goToRegister(context);
+                          } else if (provider.errorMessage != null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Error: ${provider.errorMessage}')),
+                            );
+                          }
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error obteniendo ubicación: $e')),
+                          );
+                        }
                       },
                       child: const Text('Guardar'),
                     ),

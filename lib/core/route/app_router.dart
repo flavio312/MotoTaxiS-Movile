@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-
 import 'package:viajeseguro/features/login/presentation/providers/auth_provider.dart';
 import 'package:viajeseguro/features/login/presentation/page/login_screen.dart';
 import 'package:viajeseguro/features/login/presentation/page/register_person_screen.dart';
@@ -16,6 +15,7 @@ import 'package:viajeseguro/features/settings/presentation/page/settings_screen.
 import 'package:viajeseguro/features/settings/presentation/page/privacy_screen.dart';
 // --------CONDUCTOR-----------
 import '../../features/conductor/presentation/page/registro_conductor_screen.dart';
+import '../../features/conductor/presentation/page/jornada_conductor_screen.dart';
 import '../../features/conductor/presentation/page/home_conductor_screen.dart';
 import '../../features/conductor/presentation/page/evaluar_usuario_screen.dart';
 import '../../features/conductor/presentation/page/qr_conductor_screen.dart';
@@ -50,13 +50,14 @@ class AppRouter {
       final isLogin = state.matchedLocation == RoutePaths.login;
       final isRegister = state.matchedLocation == RoutePaths.registerPerson;
       final isProfile = state.matchedLocation == RoutePaths.profile;
+      final isAddress = state.matchedLocation == RoutePaths.address;
 
       if (isLoading) {
         return isLogin ? null : RoutePaths.login;
       }
 
       if (!isAuthenticated) {
-        if (isLogin || isRegister || isProfile) return null;
+        if (isLogin || isRegister || isProfile || isAddress) return null;
         return RoutePaths.login;
       }
 
@@ -127,6 +128,11 @@ class AppRouter {
         path: RoutePaths.registroConductor,
         name: RouteNames.registroConductor,
         builder: (context, state) => const RegistroConductorScreen(),
+      ),
+      GoRoute(
+        path: RoutePaths.jornadaConductor,
+        name: RouteNames.jornadaConductor,
+        builder: (context, state) => const JornadaConductorScreen(),
       ),
       GoRoute(
         path:RoutePaths.homeConductor,

@@ -13,6 +13,7 @@ class RouteNames {
 
   // --------Conductor-----------------
   static const String registroConductor  = 'conductor/registro';
+  static const String jornadaConductor = 'conductor/jornada';
   static const String homeConductor      = 'conductor/home';
   static const String solicitudEntrante  = 'conductor/solicitud';
   static const String viajeConductor     = 'conductor/viaje';

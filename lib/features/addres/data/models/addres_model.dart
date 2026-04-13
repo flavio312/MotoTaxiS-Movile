@@ -17,9 +17,7 @@ class AddresModel extends Addres{
 
   factory AddresModel.fromJson(Map<String, dynamic> json){
     return AddresModel(
-      idDireccion: json['idDireccion'] is int
-        ? json['idDireccion']
-        : int.tryParse(json['idDireccion'].toString()) ?? 0,
+      idDireccion: json['idDireccion'] ?? 0,
       estado: json['estado'] ?? '',
       municipio: json['municipio'] ?? '',
       asentamiento: json['asentamiento'] ?? '',

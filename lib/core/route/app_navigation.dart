@@ -78,6 +78,9 @@ class AppNavigation {
   static void gotToRegistroConductor(BuildContext context) {
     context.goNamed(RouteNames.registroConductor);
   }
+  static void goToJornadaConductor(BuildContext context) {
+    context.goNamed(RouteNames.jornadaConductor);
+  }
   static void gotToHomeConductor(BuildContext context) {
     context.goNamed(RouteNames.homeConductor);
   }
