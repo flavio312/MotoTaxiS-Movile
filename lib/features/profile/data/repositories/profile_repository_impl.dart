@@ -10,12 +10,12 @@ class ProfileRepositoryImpl implements ProfileRepository {
   ProfileRepositoryImpl({required this.datasource});
 
   @override
-  Future<String> createUser({required Profile profile, File? foto}) async {
+  Future<String> createUser({required Profile profile, File? fotoPerfil}) async {
     final model = ProfileModel(
       nombreUsuario: profile.nombreUsuario,
       password: profile.password,
       rol: profile.rol,
     );
-    return datasource.createUser(model, foto);
+    return datasource.createUser(model, fotoPerfil);
   }
 }

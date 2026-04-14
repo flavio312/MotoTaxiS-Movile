@@ -69,6 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   shape: BoxShape.circle,
                   color: Color(0xFFBBBBBB),
                 ),
+
                 child: provider.selectedImage != null
                     ? ClipOval(
                   child: Image.file(

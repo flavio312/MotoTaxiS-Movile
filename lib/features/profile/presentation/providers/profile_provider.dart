@@ -21,12 +21,12 @@ class ProfileProvider extends ChangeNotifier {
   String? get token => _token;
   File? get selectedImage => _selectedImage;
 
+
   String? get roleFromToken {
     if (_token == null) return null;
     final decoded = JwtDecoder.decode(_token!);
     return decoded['rol'];
   }
-  /// Permite actualizar la imagen seleccionada desde cámara o galería
   void setImage(File? image) {
     _selectedImage = image;
     notifyListeners();
@@ -36,7 +36,7 @@ class ProfileProvider extends ChangeNotifier {
     required String nombreUsuario,
     required String password,
     required String rol,
-    File? foto,
+    File? fotoPerfil,
   }) async {
     _isLoading = true;
     _error = null;
@@ -51,7 +51,8 @@ class ProfileProvider extends ChangeNotifier {
 
       final result = await createUserUseCase(
         profile: profile,
-        foto: _selectedImage,
+        fotoPerfil: _selectedImage,
+
       );
 
       _token = result;

@@ -1,5 +1,8 @@
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../core/network/auth_service.dart';
 
 import 'package:viajeseguro/features/login/presentation/providers/auth_provider.dart';
 import 'package:viajeseguro/features/login/presentation/page/login_screen.dart';
@@ -35,6 +38,7 @@ import 'route_paths.dart';
 
 class AppRouter {
   final AuthProvider authProvider;
+  final AuthService _authService = AuthService();
 
   AppRouter(this.authProvider);
 
@@ -46,23 +50,47 @@ class AppRouter {
     redirect: (BuildContext context, GoRouterState state) {
       final isLoading = authProvider.isLoading;
       final isAuthenticated = authProvider.isAuthenticated;
+      final rol = authProvider.rol;
 
-      final isLogin = state.matchedLocation == RoutePaths.login;
-      final isRegister = state.matchedLocation == RoutePaths.registerPerson;
-      final isProfile = state.matchedLocation == RoutePaths.profile;
-      final isAddress = state.matchedLocation == RoutePaths.address;
+      final currentPath = state.matchedLocation;
 
-      if (isLoading) {
+      final isLogin = currentPath == RoutePaths.login;
+      final isRegister = currentPath == RoutePaths.profile;
+
+      if (isLoading) return null;
+
+      // No autenticado
+      if (!isAuthenticated) {
         return isLogin ? null : RoutePaths.login;
       }
 
-      if (!isAuthenticated) {
-        if (isLogin || isRegister || isProfile || isAddress) return null;
-        return RoutePaths.login;
+      // Ya autenticado → evitar login
+      if (isLogin || isRegister) {
+        switch (rol) {
+          case 'pasajero':
+            return RoutePaths.service;
+          case 'conductor':
+            return RoutePaths.homeConductor;
+          case 'propietario':
+            return RoutePaths.homePropietario;
+        }
       }
 
-      if (isLogin || isRegister) {
+      // 🔒 PROTECCIÓN POR ROL
+      if (rol == 'pasajero' && currentPath.startsWith('/conductor')) {
         return RoutePaths.service;
+      }
+
+      if (rol == 'pasajero' && currentPath.startsWith('/propietario')) {
+        return RoutePaths.service;
+      }
+
+      if (rol == 'conductor' && currentPath.startsWith('/service')) {
+        return RoutePaths.homeConductor;
+      }
+
+      if (rol == 'propietario' && currentPath.startsWith('/service')) {
+        return RoutePaths.homePropietario;
       }
 
       return null;

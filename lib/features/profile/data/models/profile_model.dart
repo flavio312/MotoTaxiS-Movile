@@ -21,6 +21,6 @@ class ProfileModel {
     nombreUsuario: json['nombreUsuario'] ?? '',
     password: json['password'] ?? '',
     rol: json['rol'] ?? '',
-    fotoPerfil: json['fotoPerfil'],
+    fotoPerfil: json['fotoPerfil'] ?? '',
   );
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 import 'package:viajeseguro/core/widgets/vs_bottom_nav.dart';
 import 'package:viajeseguro/core/widgets/vs_text_field.dart';
@@ -18,13 +19,32 @@ class _RegistroConductorScreenState extends State<RegistroConductorScreen> {
   final _fechaVencimientoCtrl = TextEditingController();
   final _descripcionCtrl = TextEditingController();
 
-
   @override
   void dispose() {
     _licenciaCtrl.dispose();
     _fechaExpedicionCtrl.dispose();
     _fechaVencimientoCtrl.dispose();
     super.dispose();
+  }
+
+  Widget _buildDateField(String label, TextEditingController controller) {
+    return TextField(
+      controller: controller,
+      readOnly: true,
+      decoration: InputDecoration(labelText: label),
+      onTap: () async {
+        final DateTime? picked = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2100),
+          locale: const Locale('es', 'MX'),
+        );
+        if (picked != null) {
+          controller.text = DateFormat('dd/MM/yyyy').format(picked);
+        }
+      },
+    );
   }
 
   @override
@@ -80,16 +100,12 @@ class _RegistroConductorScreenState extends State<RegistroConductorScreen> {
                     // ── Fechas ───────────────────────
                     Row(
                       children: [
-                        Expanded(child: VsTextField(
-                          label: 'Fecha de expedicion',
-                          controller: _fechaExpedicionCtrl,
-                          keyboardType: TextInputType.datetime,
+                        Expanded(child: _buildDateField(
+                          'Fecha de expedicion', _fechaExpedicionCtrl,
                         )),
                         const SizedBox(width: 10),
-                        Expanded(child: VsTextField(
-                          label: 'Fecha de vencimiento',
-                          controller: _fechaVencimientoCtrl,
-                          keyboardType: TextInputType.datetime,
+                        Expanded(child: _buildDateField(
+                          'Fecha de vencimiento', _fechaVencimientoCtrl,
                         )),
                       ],
                     ),

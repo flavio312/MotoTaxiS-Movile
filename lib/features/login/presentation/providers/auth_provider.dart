@@ -21,6 +21,12 @@ class AuthProvider with ChangeNotifier {
     _checkAuthStatus();
   }
 
+  String? _token;
+  String? _rol;
+
+  String? get token => _token;
+  String? get rol => _rol;
+
   AuthStatus _status = AuthStatus.initial;
   Auth? _auth;
   String? _errorMessage;

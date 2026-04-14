@@ -7,7 +7,7 @@ class CreateUser {
 
   CreateUser({required this.repository});
 
-  Future<String> call({required Profile profile, File? foto}) {
-    return repository.createUser(profile: profile, foto: foto);
+  Future<String> call({required Profile profile, File? fotoPerfil}) {
+    return repository.createUser(profile: profile, fotoPerfil: fotoPerfil);
   }
 }

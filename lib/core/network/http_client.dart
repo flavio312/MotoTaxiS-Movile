@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'auth_service.dart';
+import 'package:http_parser/http_parser.dart';
 
 class HttpClient {
   final String baseUrl;
+  final AuthService _authService = AuthService();
 
   HttpClient({required this.baseUrl});
 
@@ -13,11 +16,14 @@ class HttpClient {
     Map<String, String>? headers,
   }) async {
     final url = Uri.parse('$baseUrl$endpoint');
+    final token = await _authService.getToken();
+
     final response = await http.post(
       url,
       body: jsonEncode(body),
       headers: {
         'Content-Type': 'application/json',
+        if(token != null) 'Authorization': 'Bearer $token',
         ...?headers,
       },
     );
@@ -32,13 +38,11 @@ class HttpClient {
     }
   }
 
-
-
   Future<dynamic> multipart({
     required String endpoint,
     required Map<String, String> fields,
     required File? file,
-    String fileField = 'image',
+    String fileField = 'fotoPerfil',
     String method = 'POST',
   }) async {
     final url = Uri.parse('$baseUrl$endpoint');
@@ -48,7 +52,11 @@ class HttpClient {
 
     if (file != null) {
       request.files.add(
-        await http.MultipartFile.fromPath(fileField, file.path),
+        await http.MultipartFile.fromPath(
+            fileField,
+            file.path,
+          contentType: MediaType('image', 'jpeg'),
+        ),
       );
     }
 
@@ -76,7 +84,23 @@ class HttpClient {
     Map<String, String>? headers,
   }) async {
     final url = Uri.parse('$baseUrl$endpoint');
-    final response = await http.get(url, headers: headers);
+
+    final token = await _authService.getToken();
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+        ...?headers,
+      },
+    );
+
+    // 🔥 401 = sesión expirada
+    if (response.statusCode == 401) {
+      await _authService.clearSession();
+      throw Exception('SESSION_EXPIRED');
+    }
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return jsonDecode(response.body);

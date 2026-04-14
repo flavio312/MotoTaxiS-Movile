@@ -4,6 +4,6 @@ import '../entities/profile.dart';
 abstract class ProfileRepository {
   Future<String> createUser({
     required Profile profile,
-    File? foto,
+    File? fotoPerfil,
   });
 }

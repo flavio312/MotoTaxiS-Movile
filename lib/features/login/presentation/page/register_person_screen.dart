@@ -22,6 +22,7 @@ class _RegisterScreenState extends State<RegisterPersonScreen> {
   final _sexoCtrl = TextEditingController();
   final _telefonoCtrl = TextEditingController();
   final _correoCtrl = TextEditingController();
+  final _fechaNacimientoCtrl = TextEditingController();
 
   @override
   void dispose() {
@@ -31,6 +32,7 @@ class _RegisterScreenState extends State<RegisterPersonScreen> {
     _sexoCtrl.dispose();
     _telefonoCtrl.dispose();
     _correoCtrl.dispose();
+    _fechaNacimientoCtrl.dispose();
     super.dispose();
   }
 
@@ -81,15 +83,23 @@ class _RegisterScreenState extends State<RegisterPersonScreen> {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 12),
-
                 Row(
                   children: [
                     Expanded(
-                      child: VsTextField(
-                        label: 'Sexo (Masculino/Femenino/Otro)',
-                        controller: _sexoCtrl,
+                      child: DropdownButtonFormField<String>(
+                        value: null,
+                        decoration: const InputDecoration(labelText: 'Sexo'),
+                        items: const [
+                          DropdownMenuItem(value: 'Masculino', child: Text('Masculino')),
+                          DropdownMenuItem(value: 'Femenino', child: Text('Femenino')),
+                          DropdownMenuItem(value: 'Otro', child: Text('Otro')),
+                        ],
+                        onChanged: (value) {
+                          _sexoCtrl.text = value ?? '';
+                        },
+                        validator: (value) =>
+                        value == null || value.isEmpty ? 'Seleccione sexo' : null,
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -112,6 +122,28 @@ class _RegisterScreenState extends State<RegisterPersonScreen> {
                 ),
 
                 const SizedBox(height: 28),
+                TextFormField(
+                  controller: _fechaNacimientoCtrl,
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Fecha de nacimiento',
+                    suffixIcon: Icon(Icons.calendar_today),
+                  ),
+                  onTap: () async {
+                    final DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime(2000),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                    );
+                    if (picked != null) {
+                      _fechaNacimientoCtrl.text =
+                      "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+                    }
+                  },
+                  validator: (value) =>
+                  value == null || value.isEmpty ? 'Seleccione fecha' : null,
+                ),const SizedBox(height: 12),
 
                 ElevatedButton(
                   onPressed: personProvider.isLoading
@@ -136,7 +168,7 @@ class _RegisterScreenState extends State<RegisterPersonScreen> {
                       "idSexo": _mapSexoToId(_sexoCtrl.text),
                       "correoElectronico": _correoCtrl.text,
                       "telefono": _telefonoCtrl.text,
-                      "fechaNacimiento": "1997-12-23", // luego lo haces dinámico
+                      "fechaNacimiento": _fechaNacimientoCtrl.text,
                     };
 
                     await context.read<PersonProvider>().register(
@@ -150,8 +182,24 @@ class _RegisterScreenState extends State<RegisterPersonScreen> {
                           content: Text(context.read<PersonProvider>().error!),
                         ),
                       );
-                    } else {
-                      AppNavigation.goToService(context);
+                      return;
+                    }
+                    final rol = profileProvider.roleFromToken;
+                    switch(rol){
+                      case 'pasajero':
+                        AppNavigation.goToService(context);
+                        break;
+                      case 'conductor':
+                        AppNavigation.gotToRegistroConductor(context);
+                        break;
+                      case 'propietario':
+                        AppNavigation.gotToRegistroPropietario(context);
+                        break;
+                      default:
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Rol no válido')),
+                        );
+                        AppNavigation.goToLogin(context);
                     }
                   },
                   child: personProvider.isLoading

@@ -7,11 +7,7 @@ class Conductor extends Equatable{
   final String licenciaFechaVencimiento;
   final String estatus;
   final String descripcion;
-  final String fechaRegistro;
-  final String fechaInicio;
-  final String fechaFin;
-  final String dias;
-  final String horas;
+  final Jornada jornada;
 
   const Conductor ({
     required this.idConductor,
@@ -20,11 +16,7 @@ class Conductor extends Equatable{
     required this.licenciaFechaVencimiento,
     required this.estatus,
     required this.descripcion,
-    required this.fechaRegistro,
-    required this.fechaInicio,
-    required this.fechaFin,
-    required this.dias,
-    required this.horas,
+    required this.jornada,
   });
 
   @override
@@ -36,10 +28,28 @@ class Conductor extends Equatable{
     licenciaFechaVencimiento,
     estatus,
     descripcion,
-    fechaRegistro,
-    fechaInicio,
-    fechaFin,
-    dias,
-    horas,
+    jornada
   ];
+}
+
+class Jornada {
+  final String fechaRegistro;
+  final String fechaInicio;
+  final String fechaFin;
+  final Horario horario;
+
+  Jornada({
+    required this.fechaRegistro,
+    required this.fechaInicio,
+    required this.fechaFin,
+    required this.horario,
+  });
+}
+class Horario{
+  final String dias;
+  final String horas;
+  Horario({
+    required this.dias,
+    required this.horas
+});
 }

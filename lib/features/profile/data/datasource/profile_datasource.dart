@@ -7,11 +7,11 @@ class ProfileDatasource {
 
   ProfileDatasource({required this.httpClient});
 
-  Future<String> createUser(ProfileModel model, File? foto) async {
+  Future<String> createUser(ProfileModel model, File? fotoPerfil) async {
     final response = await httpClient.multipart(
       endpoint: '/usuarios/registro',
       fields: model.toFields(),
-      file: foto,
+      file: fotoPerfil,
       fileField: 'fotoPerfil',
       method: 'POST',
     );
