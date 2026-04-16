@@ -6,7 +6,6 @@ import 'package:viajeseguro/core/widgets/vs_logo_header.dart';
 import 'package:viajeseguro/core/widgets/vs_text_field.dart';
 import '../../../profile/presentation/providers/profile_provider.dart';
 import '../providers/person_provider.dart';
-import 'package:viajeseguro/features/login/presentation/providers/auth_provider.dart';
 
 class RegisterPersonScreen extends StatefulWidget {
   const RegisterPersonScreen({super.key});

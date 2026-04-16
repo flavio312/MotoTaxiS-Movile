@@ -3,9 +3,9 @@ import 'package:viajeseguro/features/conductor/domain/entities/conductor.dart';
 import '../../domain/usecase/register_conductor.dart';
 
 class ConductorProvider extends ChangeNotifier {
-  final RegisterConductor registerConductor;
+  final RegisterConductor registerConductorUseCase;
 
-  ConductorProvider({required this.registerConductor});
+  ConductorProvider({required this.registerConductorUseCase});
 
   bool _isLoading = false;
   String? _error;
@@ -22,7 +22,7 @@ class ConductorProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await registerConductor(
+      await registerConductorUseCase(
           conductor: conductor,
           token: token);
     } catch (e) {

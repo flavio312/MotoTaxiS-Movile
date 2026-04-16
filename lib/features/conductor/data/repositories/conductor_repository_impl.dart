@@ -3,7 +3,6 @@ import '../../domain/repositories/conductor_repository.dart';
 import '../datasource/conductor_datasource.dart';
 import '../../domain/entities/conductor.dart';
 
-
 class ConductorRepositoryImpl implements ConductorRepository{
   final ConductorDatasource datasource;
 

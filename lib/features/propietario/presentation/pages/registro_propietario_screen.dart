@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:viajeseguro/core/route/app_navigation.dart';
-import 'package:viajeseguro/core/route/app_router.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 import 'package:viajeseguro/core/widgets/vs_bottom_nav.dart';
 import 'package:viajeseguro/core/widgets/vs_text_field.dart';
+import '../providers/propietario_provider.dart';
+import 'package:viajeseguro/features/profile/presentation/providers/profile_provider.dart';
 
 class RegistroPropietarioScreen extends StatefulWidget {
   const RegistroPropietarioScreen({super.key});
@@ -15,8 +16,7 @@ class RegistroPropietarioScreen extends StatefulWidget {
       _RegistroPropietarioScreenState();
 }
 
-class _RegistroPropietarioScreenState
-    extends State<RegistroPropietarioScreen> {
+class _RegistroPropietarioScreenState extends State<RegistroPropietarioScreen> {
   final _rfcCtrl        = TextEditingController();
   final _razonCtrl      = TextEditingController();
   final _formKey        = GlobalKey<FormState>();
@@ -30,12 +30,13 @@ class _RegistroPropietarioScreenState
 
   @override
   Widget build(BuildContext context) {
+    final propietarioProvider =context.watch<PropietarioProvider>();
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            // ── Header ──────────────────────────────
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Center(
@@ -45,7 +46,6 @@ class _RegistroPropietarioScreenState
               ),
             ),
             Container(height: 3, color: AppColors.primary),
-
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
@@ -55,7 +55,6 @@ class _RegistroPropietarioScreenState
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // ── Logo box ──────────────────
                       Container(
                         width: 110,
                         height: 110,
@@ -77,8 +76,6 @@ class _RegistroPropietarioScreenState
                         ),
                       ),
                       const SizedBox(height: 32),
-
-                      // ── RFC ───────────────────────
                       VsTextField(
                         label: 'RFC',
                         controller: _rfcCtrl,
@@ -86,8 +83,6 @@ class _RegistroPropietarioScreenState
                         (v == null || v.isEmpty) ? 'Campo requerido' : null,
                       ),
                       const SizedBox(height: 14),
-
-                      // ── Razón Social ──────────────
                       VsTextField(
                         label: 'Razón Social',
                         controller: _razonCtrl,
@@ -95,13 +90,37 @@ class _RegistroPropietarioScreenState
                         (v == null || v.isEmpty) ? 'Campo requerido' : null,
                       ),
                       const SizedBox(height: 36),
-
-                      // ── Guardar ───────────────────
                       ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState?.validate() ?? false) {
-                            AppNavigation.goToHomePropietario(context);
+                        onPressed: propietarioProvider.isLoading ? null : () async {
+                          if (!(_formKey.currentState?.validate() ?? false)) return;
+
+                          final profileProvider = context.read<ProfileProvider>();
+                          final token = profileProvider.token;
+
+                          if (token == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Token no disponible')),
+                            );
+                            return;
                           }
+                          final data ={
+                            "rfc": _rfcCtrl.text,
+                            "razonSocial": _razonCtrl.text,
+                          };
+                          await context.read<PropietarioProvider>().register(
+                            data: data,
+                            token: token,
+                          );
+                          if (context.read<PropietarioProvider>().error != null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(context.read<PropietarioProvider>().error!)
+                              ),
+                            );
+                            return ;
+                          }
+
+                          AppNavigation.goToHomePropietario(context);
+
                         },
                         child: const Text('Guardar'),
                       ),

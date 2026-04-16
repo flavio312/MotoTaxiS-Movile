@@ -1,0 +1,16 @@
+import '../../domain/repository/propietario_repository.dart';
+import '../datasource/propietario_datasource.dart';
+
+class PropietarioRepositoryImpl implements PropietarioRepository{
+  final PropietarioDatasource datasource;
+
+  PropietarioRepositoryImpl({required this.datasource});
+
+  @override
+  Future<void> registerPropietario({
+    required Map<String, dynamic> data,
+    required String token,
+  }){
+    return datasource.registerPropietario(data: data, token: token);
+  }
+}

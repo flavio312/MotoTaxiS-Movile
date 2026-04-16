@@ -13,7 +13,9 @@ class AddresRepositoryImpl implements AddresRepository {
     required String token
     // TODO: implement registerAddres
   }){
-  return datasource.registerAddres(data: data, token: token);
-
+  return datasource.registerAddres(
+      data: data,
+      token: token
+  );
   }
 }

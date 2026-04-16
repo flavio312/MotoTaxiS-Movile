@@ -1,0 +1,20 @@
+import 'package:viajeseguro/core/network/http_client.dart';
+
+class PropietarioDatasource {
+  final HttpClient httpClient;
+
+  PropietarioDatasource({required this.httpClient});
+
+  Future<void> registerPropietario({
+    required Map<String, dynamic> data,
+    required String token,
+  })async{
+    await httpClient.post(
+      endpoint: '/usuarios/propietarios',
+      body: data,
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+  }
+}
