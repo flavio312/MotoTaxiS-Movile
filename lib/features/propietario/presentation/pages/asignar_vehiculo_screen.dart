@@ -99,7 +99,7 @@ class _AsignarVehiculoScreenState extends State<AsignarVehiculoScreen> {
 
                         // Botón escanear QR
                         GestureDetector(
-                          onTap: () => AppNavigation.gotToEscanearQr(context),
+                          onTap: () => AppNavigation.goToEscanearQr(context),
                           child: Column(
                             children: [
                               Text('Escanear',
@@ -177,7 +177,7 @@ class _AsignarVehiculoScreenState extends State<AsignarVehiculoScreen> {
                               borderRadius: BorderRadius.circular(30)),
                         ),
                         onPressed: () =>
-                            AppNavigation.gotToHomePropietario(context),
+                            AppNavigation.goToHomePropietario(context),
                         child: const Text('Asignar'),
                       ),
                     ),

@@ -122,7 +122,7 @@ class _DetalleVehiculoScreenState extends State<DetalleVehiculoScreen> {
                               borderRadius: BorderRadius.circular(30)),
                         ),
                         onPressed: () =>
-                            AppNavigation.gotToHomePropietario(context),
+                            AppNavigation.goToHomePropietario(context),
                         child: const Text('Regresar'),
                       ),
                     ),

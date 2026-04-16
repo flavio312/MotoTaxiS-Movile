@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class Conductor extends Equatable{
+class Conductor extends Equatable {
   final int idConductor;
   final String licencia;
   final String licenciaFechaExpedicion;
@@ -9,7 +9,7 @@ class Conductor extends Equatable{
   final String descripcion;
   final Jornada jornada;
 
-  const Conductor ({
+  const Conductor({
     required this.idConductor,
     required this.licencia,
     required this.licenciaFechaExpedicion,
@@ -19,8 +19,29 @@ class Conductor extends Equatable{
     required this.jornada,
   });
 
+  Conductor copyWith({
+    int? idConductor,
+    String? licencia,
+    String? licenciaFechaExpedicion,
+    String? licenciaFechaVencimiento,
+    String? estatus,
+    String? descripcion,
+    Jornada? jornada,
+  }) {
+    return Conductor(
+      idConductor: idConductor ?? this.idConductor,
+      licencia: licencia ?? this.licencia,
+      licenciaFechaExpedicion:
+      licenciaFechaExpedicion ?? this.licenciaFechaExpedicion,
+      licenciaFechaVencimiento:
+      licenciaFechaVencimiento ?? this.licenciaFechaVencimiento,
+      estatus: estatus ?? this.estatus,
+      descripcion: descripcion ?? this.descripcion,
+      jornada: jornada ?? this.jornada,
+    );
+  }
+
   @override
-  // TODO: implement props
   List<Object?> get props => [
     idConductor,
     licencia,
@@ -31,7 +52,6 @@ class Conductor extends Equatable{
     jornada
   ];
 }
-
 class Jornada {
   final String fechaRegistro;
   final String fechaInicio;
@@ -44,12 +64,38 @@ class Jornada {
     required this.fechaFin,
     required this.horario,
   });
+
+  Jornada copyWith({
+    String? fechaRegistro,
+    String? fechaInicio,
+    String? fechaFin,
+    Horario? horario,
+  }) {
+    return Jornada(
+      fechaRegistro: fechaRegistro ?? this.fechaRegistro,
+      fechaInicio: fechaInicio ?? this.fechaInicio,
+      fechaFin: fechaFin ?? this.fechaFin,
+      horario: horario ?? this.horario,
+    );
+  }
 }
-class Horario{
+
+class Horario {
   final String dias;
   final String horas;
+
   Horario({
     required this.dias,
-    required this.horas
-});
+    required this.horas,
+  });
+
+  Horario copyWith({
+    String? dias,
+    String? horas,
+  }) {
+    return Horario(
+      dias: dias ?? this.dias,
+      horas: horas ?? this.horas,
+    );
+  }
 }

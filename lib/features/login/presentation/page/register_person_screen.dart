@@ -6,6 +6,7 @@ import 'package:viajeseguro/core/widgets/vs_logo_header.dart';
 import 'package:viajeseguro/core/widgets/vs_text_field.dart';
 import '../../../profile/presentation/providers/profile_provider.dart';
 import '../providers/person_provider.dart';
+import 'package:viajeseguro/features/login/presentation/providers/auth_provider.dart';
 
 class RegisterPersonScreen extends StatefulWidget {
   const RegisterPersonScreen({super.key});
@@ -184,16 +185,17 @@ class _RegisterScreenState extends State<RegisterPersonScreen> {
                       );
                       return;
                     }
-                    final rol = profileProvider.roleFromToken;
+                    final rol = profileProvider.roleFromToken?.toLowerCase().trim();
+                    print('ROL DETECTADO: $rol');
                     switch(rol){
                       case 'pasajero':
                         AppNavigation.goToService(context);
                         break;
                       case 'conductor':
-                        AppNavigation.gotToRegistroConductor(context);
+                        AppNavigation.goToRegistroConductor(context);
                         break;
                       case 'propietario':
-                        AppNavigation.gotToRegistroPropietario(context);
+                        AppNavigation.goToRegistroPropietario(context);
                         break;
                       default:
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -206,7 +208,6 @@ class _RegisterScreenState extends State<RegisterPersonScreen> {
                       ? const CircularProgressIndicator(color: Colors.white)
                       : const Text('Registrar'),
                 ),
-
                 const SizedBox(height: 16),
               ],
             ),

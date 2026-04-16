@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:viajeseguro/core/route/route_names.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 import 'package:viajeseguro/core/widgets/vs_bottom_nav.dart';
 import 'package:viajeseguro/core/widgets/vs_text_field.dart';
+import 'package:viajeseguro/features/profile/presentation/providers/profile_provider.dart';
 import '../../../../core/route/app_navigation.dart';
+import 'package:viajeseguro/features/profile/presentation/providers/profile_provider.dart';
+import '../providers/conductor_provider.dart';
 
 class RegistroConductorScreen extends StatefulWidget {
   const RegistroConductorScreen({super.key});
@@ -14,37 +18,31 @@ class RegistroConductorScreen extends StatefulWidget {
 }
 
 class _RegistroConductorScreenState extends State<RegistroConductorScreen> {
+  final _formKey = GlobalKey<FormState>();
   final _licenciaCtrl       = TextEditingController();
-  final _fechaExpedicionCtrl = TextEditingController();
-  final _fechaVencimientoCtrl = TextEditingController();
+  final _licenciaFechaExpedicionCtrl = TextEditingController();
+  final _licenciaFechaVencimientoCtrl = TextEditingController();
   final _descripcionCtrl = TextEditingController();
 
   @override
   void dispose() {
     _licenciaCtrl.dispose();
-    _fechaExpedicionCtrl.dispose();
-    _fechaVencimientoCtrl.dispose();
+    _licenciaFechaExpedicionCtrl.dispose();
+    _licenciaFechaVencimientoCtrl.dispose();
+    _descripcionCtrl.dispose();
     super.dispose();
   }
-
-  Widget _buildDateField(String label, TextEditingController controller) {
-    return TextField(
-      controller: controller,
-      readOnly: true,
-      decoration: InputDecoration(labelText: label),
-      onTap: () async {
-        final DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(1900),
-          lastDate: DateTime(2100),
-          locale: const Locale('es', 'MX'),
-        );
-        if (picked != null) {
-          controller.text = DateFormat('dd/MM/yyyy').format(picked);
-        }
-      },
+  Future<void> _selectDate(TextEditingController controller, String label) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
     );
+    if (picked != null) {
+      controller.text =
+      "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+    }
   }
 
   @override
@@ -54,7 +52,6 @@ class _RegistroConductorScreenState extends State<RegistroConductorScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // ── Header ──────────────────────────────
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Center(
@@ -69,7 +66,6 @@ class _RegistroConductorScreenState extends State<RegistroConductorScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // ── Logo box ─────────────────────
                     Container(
                       width: 100, height: 100,
                       decoration: BoxDecoration(
@@ -81,7 +77,7 @@ class _RegistroConductorScreenState extends State<RegistroConductorScreen> {
                         children: [
                           const Icon(Icons.motorcycle, color: Colors.white, size: 42),
                           const SizedBox(height: 4),
-                          Text('ViajeSeguro',
+                          Text('MotoTaxi Seguro',
                               style: GoogleFonts.poppins(
                                   color: Colors.white, fontSize: 10,
                                   fontWeight: FontWeight.w600)),
@@ -89,26 +85,36 @@ class _RegistroConductorScreenState extends State<RegistroConductorScreen> {
                       ),
                     ),
                     const SizedBox(height: 28),
-
-                    // ── Licencia ─────────────────────
                     VsTextField(
                       label: 'Licencia de conducir',
                       controller: _licenciaCtrl,
                     ),
                     const SizedBox(height: 14),
-
-                    // ── Fechas ───────────────────────
-                    Row(
-                      children: [
-                        Expanded(child: _buildDateField(
-                          'Fecha de expedicion', _fechaExpedicionCtrl,
-                        )),
-                        const SizedBox(width: 10),
-                        Expanded(child: _buildDateField(
-                          'Fecha de vencimiento', _fechaVencimientoCtrl,
-                        )),
-                      ],
+                    TextFormField(
+                      controller: _licenciaFechaExpedicionCtrl,
+                      readOnly: true,
+                      decoration: const InputDecoration(
+                        labelText: 'Fecha de expedición',
+                        suffixIcon: Icon(Icons.calendar_today),
+                      ),
+                      validator: (value) =>
+                      value == null || value.isEmpty ? 'Seleccione fecha' : null,
+                      onTap: () => _selectDate(_licenciaFechaExpedicionCtrl, 'Fecha de expedición'),
                     ),
+                    const SizedBox(height: 14),
+
+                    TextFormField(
+                      controller: _licenciaFechaVencimientoCtrl,
+                      readOnly: true,
+                      decoration: const InputDecoration(
+                        labelText: 'Fecha de vencimiento',
+                        suffixIcon: Icon(Icons.calendar_today),
+                      ),
+                      validator: (value) =>
+                      value == null || value.isEmpty ? 'Seleccione fecha' : null,
+                      onTap: () => _selectDate(_licenciaFechaVencimientoCtrl, 'Fecha de vencimiento'),
+                    ),
+
 
                     const SizedBox(height: 36),
                     VsTextField(
@@ -119,8 +125,18 @@ class _RegistroConductorScreenState extends State<RegistroConductorScreen> {
 
                     // ── Guardar ──────────────────────
                     ElevatedButton(
-                      onPressed: () => AppNavigation.goToJornadaConductor(context),
-                      child: const Text('Continuar'),
+                      onPressed: () {
+                        final data = {
+                          "licencia": _licenciaCtrl.text,
+                          "licenciaFechaExpedicion": _licenciaFechaExpedicionCtrl
+                              .text,
+                          "licenciaFechaVencimiento": _licenciaFechaVencimientoCtrl
+                              .text,
+                          "descripcion": _descripcionCtrl.text,
+                        };
+                        AppNavigation.pushNamed(context, RouteNames.jornadaConductor, extra: data,);
+                      },
+                      child: const Text('Continuar')
                     ),
                   ],
                 ),
@@ -133,5 +149,3 @@ class _RegistroConductorScreenState extends State<RegistroConductorScreen> {
     );
   }
 }
-
-

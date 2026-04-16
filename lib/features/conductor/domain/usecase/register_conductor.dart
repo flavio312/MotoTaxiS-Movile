@@ -1,4 +1,5 @@
-import '../repositories/conductor_repository.dart';
+import 'package:viajeseguro/features/conductor/domain/entities/conductor.dart';
+import 'package:viajeseguro/features/conductor/domain/repositories/conductor_repository.dart';
 
 class RegisterConductor{
   final ConductorRepository repository;
@@ -6,9 +7,12 @@ class RegisterConductor{
   RegisterConductor(this.repository);
 
   Future<void> call({
-    required Map<String, dynamic> data,
+    required Conductor conductor,
     required String token,
   }){
-    return repository.registerConductor(data: data, token: token);
+    return repository.registerConductor(
+        conductor: conductor,
+        token: token
+    );
   }
 }

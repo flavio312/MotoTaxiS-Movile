@@ -41,4 +41,22 @@ class ConductorModel extends Conductor {
       jornada: conductor.jornada,
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      "licencia": licencia,
+      "licenciaFechaExpedicion": licenciaFechaExpedicion,
+      "licenciaFechaVencimiento": licenciaFechaVencimiento,
+      "estatus": estatus,
+      "descripcion": descripcion,
+      "jornada": {
+        "fechaRegistro": jornada.fechaRegistro,
+        "fechaInicio": jornada.fechaInicio,
+        "fechaFin": jornada.fechaFin,
+        "horario": {
+          "dias": jornada.horario.dias,
+          "horas": jornada.horario.horas,
+        }
+      }
+    };
+  }
 }

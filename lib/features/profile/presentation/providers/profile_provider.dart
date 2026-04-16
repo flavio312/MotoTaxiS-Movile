@@ -21,12 +21,19 @@ class ProfileProvider extends ChangeNotifier {
   String? get token => _token;
   File? get selectedImage => _selectedImage;
 
-
   String? get roleFromToken {
     if (_token == null) return null;
-    final decoded = JwtDecoder.decode(_token!);
-    return decoded['rol'];
+    try {
+      final decoded = JwtDecoder.decode(_token!);
+      // ✅ Imprime el token decodificado para verificar la clave exacta
+      print('TOKEN DECODED: $decoded');
+      return decoded['rol']?.toString().toLowerCase();
+    } catch (e) {
+      print('Error decodificando token: $e');
+      return null;
+    }
   }
+
   void setImage(File? image) {
     _selectedImage = image;
     notifyListeners();

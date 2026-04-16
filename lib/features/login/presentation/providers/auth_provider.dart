@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import '../../domain/entities/auth.dart';
 import '../../domain/usecase/login_user.dart';
 import '../../domain/usecase/logout_user.dart';

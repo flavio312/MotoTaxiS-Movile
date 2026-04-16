@@ -1,6 +1,8 @@
+import '../entities/conductor.dart';
+
 abstract class ConductorRepository{
   Future<void> registerConductor({
-    required Map<String, dynamic> data,
+    required Conductor conductor,
     required String token,
   });
 }

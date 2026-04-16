@@ -100,7 +100,7 @@ class _RegistroPropietarioScreenState
                       ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState?.validate() ?? false) {
-                            AppNavigation.gotToHomePropietario(context);
+                            AppNavigation.goToHomePropietario(context);
                           }
                         },
                         child: const Text('Guardar'),

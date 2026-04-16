@@ -60,7 +60,7 @@ class QrConductorScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10)),
                         minimumSize: const Size(120, 44),
                       ),
-                      onPressed: () => AppNavigation.gotToHomeConductor(context),
+                      onPressed: () => AppNavigation.goToHomeConductor(context),
                       child: Text('Salir',
                           style: GoogleFonts.poppins(
                               fontSize: 15, color: AppColors.textPrimary,

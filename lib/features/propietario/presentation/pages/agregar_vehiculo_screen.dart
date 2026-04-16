@@ -140,7 +140,7 @@ class _AgregarVehiculoScreenState extends State<AgregarVehiculoScreen> {
                           ),
                           onPressed: () {
                             if (_formKey.currentState?.validate() ?? false) {
-                              AppNavigation.gotToAsignarVehiculo(context);
+                              AppNavigation.goToAsignarVehiculo(context);
                             }
                           },
                           child: const Text('Agregar'),

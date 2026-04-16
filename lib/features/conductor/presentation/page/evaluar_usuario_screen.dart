@@ -101,7 +101,7 @@ class _EvaluarUsuarioScreenState extends State<EvaluarUsuarioScreen> {
 
                     // ── Enviar ────────────────────────
                     ElevatedButton(
-                      onPressed: () => AppNavigation.gotToHistorialConductor(context),
+                      onPressed: () => AppNavigation.goToHistorialConductor(context),
                       child: const Text('Enviar comentario'),
                     ),
                   ],

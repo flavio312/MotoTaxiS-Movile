@@ -84,7 +84,7 @@ class _SolicitudEntranteScreenState extends State<SolicitudEntranteScreen> {
                                 child: _BigActionBtn(
                                   label: 'Aceptar',
                                   color: Colors.green,
-                                  onTap: () => AppNavigation.gotToViajeConductor(context),
+                                  onTap: () => AppNavigation.goToViajeConductor(context),
                                 ),
                               ),
                               const SizedBox(width: 10),
@@ -92,7 +92,7 @@ class _SolicitudEntranteScreenState extends State<SolicitudEntranteScreen> {
                                 child: _BigActionBtn(
                                   label: 'Rechazar',
                                   color: Colors.red,
-                                  onTap: () => AppNavigation.gotToHomeConductor(context),
+                                  onTap: () => AppNavigation.goToHomeConductor(context),
                                 ),
                               ),
                             ],
@@ -105,7 +105,7 @@ class _SolicitudEntranteScreenState extends State<SolicitudEntranteScreen> {
                     // ── Otras solicitudes en cola ─────
                     ..._otras.map((s) => SolicitudCard(
                       solicitud: s,
-                      onAceptar: () => AppNavigation.gotToSolicitudEntrante(context),
+                      onAceptar: () => AppNavigation.goToSolicitudEntrante(context),
                       onRechazar: () => setState(() => _otras.remove(s)),
                     )),
                   ],

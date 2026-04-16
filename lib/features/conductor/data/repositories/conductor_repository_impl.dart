@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
-
+import '../models/conductor_model.dart';
 import '../../domain/repositories/conductor_repository.dart';
 import '../datasource/conductor_datasource.dart';
+import '../../domain/entities/conductor.dart';
+
 
 class ConductorRepositoryImpl implements ConductorRepository{
   final ConductorDatasource datasource;
@@ -10,9 +11,14 @@ class ConductorRepositoryImpl implements ConductorRepository{
 
   @override
   Future<void> registerConductor({
-    required Map<String, dynamic> data,
-    required String token}) {
+    required Conductor conductor,
+    required String token
+  }) {
     // TODO: implement registerConductor
-  return datasource.registerConductor(data: data, token: token);
+    final model = ConductorModel.fromEntity(conductor);
+    return datasource.registerConductor(
+        data: model.toJson(),
+        token: token,
+    );
   }
 }

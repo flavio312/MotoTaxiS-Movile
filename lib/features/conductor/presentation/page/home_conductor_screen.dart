@@ -82,7 +82,7 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
                               borderRadius: BorderRadius.circular(30)),
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
-                        onPressed: () => AppNavigation.gotToQrConductor(context),
+                        onPressed: () => AppNavigation.goToQrConductor(context),
                         child: Text('Compartir informacion',
                             style: GoogleFonts.poppins(
                                 fontSize: 14, fontWeight: FontWeight.w600,
@@ -94,7 +94,7 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
                     // ── Lista de solicitudes ──────────
                     ..._solicitudes.map((s) => SolicitudCard(
                       solicitud: s,
-                      onAceptar: () => AppNavigation.gotToSolicitudEntrante(context),
+                      onAceptar: () => AppNavigation.goToSolicitudEntrante(context),
                       onRechazar: () {
                         setState(() => _solicitudes.remove(s));
                       },

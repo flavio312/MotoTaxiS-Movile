@@ -1,4 +1,3 @@
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,6 +15,7 @@ import 'package:viajeseguro/features/trip/presentation/page/active_trip_screen.d
 import 'package:viajeseguro/features/rating/presentation/page/rating_screen.dart';
 import 'package:viajeseguro/features/settings/presentation/page/settings_screen.dart';
 import 'package:viajeseguro/features/settings/presentation/page/privacy_screen.dart';
+import 'package:viajeseguro/features/profile/presentation/providers/profile_provider.dart';
 // --------CONDUCTOR-----------
 import '../../features/conductor/presentation/page/registro_conductor_screen.dart';
 import '../../features/conductor/presentation/page/jornada_conductor_screen.dart';
@@ -54,46 +54,37 @@ class AppRouter {
 
       final currentPath = state.matchedLocation;
 
-      final isLogin = currentPath == RoutePaths.login;
-      final isRegister = currentPath == RoutePaths.profile;
+      final isLogin = state.matchedLocation == RoutePaths.login;
+      final isRegister = state.matchedLocation == RoutePaths.registerPerson;
+      final isProfile = state.matchedLocation == RoutePaths.profile;
+      final isAddress = state.matchedLocation == RoutePaths.address;
 
-      if (isLoading) return null;
+      // ✅ Agregar las rutas de registro por rol como rutas permitidas
+      final isRegistroConductor = currentPath == RoutePaths.registroConductor;
+      final isJornadaConductor = currentPath == RoutePaths.jornadaConductor;
+      final isRegistroPropietario = currentPath == RoutePaths.registroPropietario;
 
-      // No autenticado
-      if (!isAuthenticated) {
+      if (isLoading) {
         return isLogin ? null : RoutePaths.login;
       }
-
-      // Ya autenticado → evitar login
+      if (!isAuthenticated) {
+        if (isLogin || isRegister || isProfile || isAddress || isRegistroConductor || isRegistroPropietario || isJornadaConductor) return null;
+        return RoutePaths.login;
+      }
       if (isLogin || isRegister) {
-        switch (rol) {
+        switch (rol?.toLowerCase()) {
           case 'pasajero':
             return RoutePaths.service;
           case 'conductor':
-            return RoutePaths.homeConductor;
+            return RoutePaths.registroConductor;
           case 'propietario':
-            return RoutePaths.homePropietario;
+            return RoutePaths.registroPropietario;
+          default:
+            return RoutePaths.login;
         }
       }
-
-      // 🔒 PROTECCIÓN POR ROL
-      if (rol == 'pasajero' && currentPath.startsWith('/conductor')) {
-        return RoutePaths.service;
-      }
-
-      if (rol == 'pasajero' && currentPath.startsWith('/propietario')) {
-        return RoutePaths.service;
-      }
-
-      if (rol == 'conductor' && currentPath.startsWith('/service')) {
-        return RoutePaths.homeConductor;
-      }
-
-      if (rol == 'propietario' && currentPath.startsWith('/service')) {
-        return RoutePaths.homePropietario;
-      }
-
       return null;
+
     },
 
     routes: [

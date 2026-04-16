@@ -78,7 +78,7 @@ class EscanearQrScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30)),
                       ),
                       onPressed: () =>
-                          AppNavigation.gotToAsignarVehiculo(context),
+                          AppNavigation.goToAsignarVehiculo(context),
                       child: const Text('Agregar'),
                     ),
                   ),

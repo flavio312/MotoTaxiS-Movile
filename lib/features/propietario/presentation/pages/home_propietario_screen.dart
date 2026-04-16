@@ -66,7 +66,7 @@ class _HomePropietarioScreenState extends State<HomePropietarioScreen> {
                     else
                       ..._vehiculos.map((v) => VehiculoCard(
                         vehiculo: v,
-                        onEditar: () => AppNavigation.gotToAsignarVehiculo(context),
+                        onEditar: () => AppNavigation.goToAsignarVehiculo(context),
                         onEliminar: () => _confirmarEliminar(context, v),
                       )),
 
@@ -80,7 +80,7 @@ class _HomePropietarioScreenState extends State<HomePropietarioScreen> {
                             borderRadius: BorderRadius.circular(30)),
                       ),
                       onPressed: () =>
-                          AppNavigation.gotToAgregarVehiculo(context),
+                          AppNavigation.goToAgregarVehiculo(context),
                       child: const Text('Agregar vehiculo'),
                     ),
                   ],

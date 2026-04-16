@@ -12,20 +12,20 @@ class RouteNames {
   static const String privacy = 'privacy';
 
   // --------Conductor-----------------
-  static const String registroConductor  = 'conductor/registro';
-  static const String jornadaConductor = 'conductor/jornada';
-  static const String homeConductor      = 'conductor/home';
-  static const String solicitudEntrante  = 'conductor/solicitud';
-  static const String viajeConductor     = 'conductor/viaje';
-  static const String evaluarUsuario     = 'conductor/evaluar';
-  static const String qrConductor        = 'conductor/qr';
-  static const String historialConductor = 'conductor/historial';
+  static const String registroConductor  = 'conductorRegistro';
+  static const String jornadaConductor = 'conductorJornada';
+  static const String homeConductor      = 'conductorHome';
+  static const String solicitudEntrante  = 'conductorSolicitud';
+  static const String viajeConductor     = 'conductorViaje';
+  static const String evaluarUsuario     = 'conductorEvaluar';
+  static const String qrConductor        = 'conductorQr';
+  static const String historialConductor = 'conductorHistorial';
 
   // --------Propietario-----------------
-  static const String registroPropietario  = 'propietario/registro';
-  static const String homePropietario      = 'propietario/home';
-  static const String agregarVehiculo      = 'propietario/agregar';
-  static const String detalleVehiculo      = 'propietario/detalle';
-  static const String asignarVehiculo      = 'propietario/asignar';
-  static const String escanearQr           = 'propietario/escanear';
+  static const String registroPropietario  = 'propietarioRegistro';
+  static const String homePropietario      = 'propietarioHome';
+  static const String agregarVehiculo      = 'propietarioAgregar';
+  static const String detalleVehiculo      = 'propietarioDetalle';
+  static const String asignarVehiculo      = 'propietarioAsignar';
+  static const String escanearQr           = 'propietarioEscanear';
 }

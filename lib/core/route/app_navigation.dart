@@ -75,47 +75,47 @@ class AppNavigation {
     context.goNamed(RouteNames.profile);
   }
   // --------Conductor-----------------
-  static void gotToRegistroConductor(BuildContext context) {
+  static void goToRegistroConductor(BuildContext context) {
     context.goNamed(RouteNames.registroConductor);
   }
   static void goToJornadaConductor(BuildContext context) {
     context.goNamed(RouteNames.jornadaConductor);
   }
-  static void gotToHomeConductor(BuildContext context) {
+  static void goToHomeConductor(BuildContext context) {
     context.goNamed(RouteNames.homeConductor);
   }
-  static void gotToSolicitudEntrante(BuildContext context) {
+  static void goToSolicitudEntrante(BuildContext context) {
     context.goNamed(RouteNames.solicitudEntrante);
   }
-  static void gotToViajeConductor(BuildContext context) {
+  static void goToViajeConductor(BuildContext context) {
     context.goNamed(RouteNames.viajeConductor);
   }
-  static void gotToEvaluarUsuario(BuildContext context) {
+  static void goToEvaluarUsuario(BuildContext context) {
     context.goNamed(RouteNames.evaluarUsuario);
   }
-  static void gotToQrConductor(BuildContext context) {
+  static void goToQrConductor(BuildContext context) {
     context.goNamed(RouteNames.qrConductor);
   }
-  static void gotToHistorialConductor(BuildContext context) {
+  static void goToHistorialConductor(BuildContext context) {
     context.goNamed(RouteNames.historialConductor);
   }
   // Propietatio
-  static void gotToRegistroPropietario(BuildContext context) {
+  static void goToRegistroPropietario(BuildContext context) {
     context.goNamed(RouteNames.registroPropietario);
   }
-  static void gotToHomePropietario(BuildContext context) {
+  static void goToHomePropietario(BuildContext context) {
     context.goNamed(RouteNames.homePropietario);
   }
-  static void gotToAgregarVehiculo(BuildContext context) {
+  static void goToAgregarVehiculo(BuildContext context) {
     context.goNamed(RouteNames.agregarVehiculo);
   }
-  static void gotToDetalleVehiculo(BuildContext context) {
+  static void goToDetalleVehiculo(BuildContext context) {
     context.goNamed(RouteNames.detalleVehiculo);
   }
-  static void gotToAsignarVehiculo(BuildContext context) {
+  static void goToAsignarVehiculo(BuildContext context) {
     context.goNamed(RouteNames.asignarVehiculo);
   }
-  static void gotToEscanearQr(BuildContext context) {
+  static void goToEscanearQr(BuildContext context) {
     context.goNamed(RouteNames.escanearQr);
   }
 }

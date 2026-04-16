@@ -122,7 +122,7 @@ class ViajeConductorScreen extends StatelessWidget {
                       icon: Icons.lock_outline,
                       color: const Color(0xFF2C2C2C),
                       textColor: Colors.white,
-                      onTap: () => AppNavigation.gotToEvaluarUsuario(context),
+                      onTap: () => AppNavigation.goToEvaluarUsuario(context),
                     ),
                     const SizedBox(height: 10),
 
@@ -131,7 +131,7 @@ class ViajeConductorScreen extends StatelessWidget {
                       label: 'Suspender servicio',
                       color: AppColors.primary,
                       textColor: Colors.white,
-                      onTap: () => AppNavigation.gotToHomeConductor(context),
+                      onTap: () => AppNavigation.goToHomeConductor(context),
                     ),
                     const SizedBox(height: 10),
 
