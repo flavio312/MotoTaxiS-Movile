@@ -103,26 +103,70 @@ class _RegistroPropietarioScreenState extends State<RegistroPropietarioScreen> {
                             );
                             return;
                           }
-                          final data ={
+
+                          final data = {
                             "rfc": _rfcCtrl.text,
                             "razonSocial": _razonCtrl.text,
                           };
+
                           await context.read<PropietarioProvider>().register(
                             data: data,
                             token: token,
                           );
-                          if (context.read<PropietarioProvider>().error != null) {
+
+                          if (!context.mounted) return;
+
+                          final error = context.read<PropietarioProvider>().error;
+
+                          if (error != null) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(context.read<PropietarioProvider>().error!)
-                              ),
+                              SnackBar(content: Text(error)),
                             );
-                            return ;
+                            return;
                           }
 
-                          AppNavigation.goToHomePropietario(context);
-
-                        },
-                        child: const Text('Guardar'),
+                          // ✅ Mostrar diálogo de solicitud procesada
+                          await showDialog(
+                            context: context,
+                            barrierDismissible: false, // El usuario debe presionar el botón
+                            builder: (context) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              icon: const Icon(
+                                Icons.hourglass_top_rounded,
+                                color: AppColors.primary,
+                                size: 48,
+                              ),
+                              title: Text(
+                                '¡Solicitud enviada!',
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              content: Text(
+                                'Su solicitud está siendo procesada por el administrador.',
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                              actionsAlignment: MainAxisAlignment.center,
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // Cierra el diálogo
+                                    AppNavigation.goToHomePropietario(context);
+                                  },
+                                  child: const Text('Aceptar'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }, child: null,
                       ),
                     ],
                   ),

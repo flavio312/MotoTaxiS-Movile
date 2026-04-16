@@ -10,7 +10,7 @@ class PropietarioProvider extends ChangeNotifier {
   String? _error;
 
   bool get isLoading => _isLoading;
-  String? get error => error;
+  String? get error => _error;
 
   Future<void>register({
     required Map<String, dynamic>data,
