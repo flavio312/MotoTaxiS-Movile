@@ -10,7 +10,7 @@ class ConductorDatasource {
     required String token,
   }) async {
     await httpClient.post(
-      endpoint: '/usuarios/conductores',
+      endpoint: '/usuarios/conductor',
       body: data,
       headers: {
         'Authorization': 'Bearer $token',

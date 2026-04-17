@@ -10,7 +10,7 @@ class VsLogoHeader extends StatelessWidget {
     return Column(
       children: [
         Text(
-          'ViajeSeguro',
+          'MotoTaxi Seguro',
           style: GoogleFonts.poppins(
             fontSize: 26,
             fontWeight: FontWeight.w700,
@@ -21,14 +21,19 @@ class VsLogoHeader extends StatelessWidget {
         Container(height: 3, color: AppColors.primary),
         const SizedBox(height: 20),
         Container(
-          width: 130,
+          width: 110,
           height: 110,
           decoration: BoxDecoration(
             color: const Color(0xFFEEEEEE),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: const Center(
-            child: Icon(Icons.pets, size: 60, color: AppColors.primary),
+          child: Center(
+            child: Image.asset(
+              'assets/mototaxi.png',
+              width: 200,
+              height: 130,
+              fit: BoxFit.contain,
+            ),
           ),
         ),
       ],

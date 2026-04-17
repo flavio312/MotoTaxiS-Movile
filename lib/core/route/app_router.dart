@@ -59,7 +59,6 @@ class AppRouter {
       final isProfile = state.matchedLocation == RoutePaths.profile;
       final isAddress = state.matchedLocation == RoutePaths.address;
 
-      // ✅ Agregar las rutas de registro por rol como rutas permitidas
       final isRegistroConductor = currentPath == RoutePaths.registroConductor;
       final isJornadaConductor = currentPath == RoutePaths.jornadaConductor;
       final isRegistroPropietario = currentPath == RoutePaths.registroPropietario;
@@ -76,9 +75,9 @@ class AppRouter {
           case 'pasajero':
             return RoutePaths.service;
           case 'conductor':
-            return RoutePaths.registroConductor;
+            return RoutePaths.homeConductor;
           case 'propietario':
-            return RoutePaths.registroPropietario;
+            return RoutePaths.homePropietario;
           default:
             return RoutePaths.login;
         }

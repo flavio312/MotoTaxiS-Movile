@@ -31,8 +31,12 @@ import 'package:viajeseguro/features/addres/presentation/providers/addres_provid
 // -----------DATES OF THE CONDUCTOR
 import 'package:viajeseguro/features/conductor/data/datasource/conductor_datasource.dart';
 import 'package:viajeseguro/features/conductor/data/repositories/conductor_repository_impl.dart';
-import 'package:viajeseguro/features/conductor/domain/repositories/conductor_repository.dart';
 import 'package:viajeseguro/features/conductor/presentation/providers/conductor_provider.dart';
+// -----------DATES OF THE PROPIETARIO
+import 'package:viajeseguro/features/propietario/data/datasource/propietario_datasource.dart';
+import 'package:viajeseguro/features/propietario/data/repository/propietario_repository_impl.dart';
+import 'package:viajeseguro/features/propietario/domain/usecases/register_propietario.dart';
+import 'package:viajeseguro/features/propietario/presentation/providers/propietario_provider.dart';
 import 'myapp.dart';
 
 Future<void> main() async {
@@ -75,7 +79,11 @@ Future<void> main() async {
     datasource: ConductorDatasource(httpClient: ApiConfig.httpClient),
   );
   final registerConductor = RegisterConductor(conductorRepository);
-
+  // Propietario setup
+  final propietarioRepository = PropietarioRepositoryImpl(
+    datasource: PropietarioDatasource(httpClient: ApiConfig.httpClient),
+  );
+  final registerPropietario = RegisterPropietario(propietarioRepository);
 
   runApp(
     MultiProvider(
@@ -106,6 +114,11 @@ Future<void> main() async {
           create: (_) => ConductorProvider(
               registerConductorUseCase: registerConductor,
           )
+        ),
+        ChangeNotifierProvider(
+          create: (_) => PropietarioProvider(
+            registerProietarioUseCase: registerPropietario,
+          ),
         ),
       ],
       child: const Myapp(),

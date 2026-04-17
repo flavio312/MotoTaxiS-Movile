@@ -46,9 +46,16 @@ class _JornadaConductorScreenState extends State<JornadaConductorScreen> {
 
     return horasGlobal.join();
   }
-  String formatDate(DateTime date) {
-    return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  String formatDate(dynamic date) {
+    if (date is String) {
+      return date; // ya está en formato yyyy-MM-dd
+    } else if (date is DateTime) {
+      return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+    } else {
+      throw ArgumentError("Unsupported type for formatDate");
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +115,8 @@ class _JornadaConductorScreenState extends State<JornadaConductorScreen> {
             final conductor = Conductor(
               idConductor: 0,
               licencia: data['licencia'],
-              licenciaFechaExpedicion: formatDate(data['licenciaFechaExpedicion']),
-              licenciaFechaVencimiento: formatDate(data['licenciaFechaVencimiento']),
+              licenciaFechaExpedicion: formatDate(DateTime.parse(data['licenciaFechaExpedicion'])),
+              licenciaFechaVencimiento: formatDate(DateTime.parse(data['licenciaFechaVencimiento'])),
               estatus: "habilitado",
               descripcion: data['descripcion'],
               jornada: Jornada(
