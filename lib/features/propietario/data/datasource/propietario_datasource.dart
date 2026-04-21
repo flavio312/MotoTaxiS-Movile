@@ -17,4 +17,16 @@ class PropietarioDatasource {
       },
     );
   }
+  Future<void> registerVehiculo({
+    required Map<String, dynamic> data,
+    required String token,
+  })async{
+    await httpClient.post(
+      endpoint: '/vehiculos',
+      body: data,
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+  }
 }

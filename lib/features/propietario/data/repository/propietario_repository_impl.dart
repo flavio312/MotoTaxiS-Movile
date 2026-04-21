@@ -13,4 +13,11 @@ class PropietarioRepositoryImpl implements PropietarioRepository{
   }){
     return datasource.registerPropietario(data: data, token: token);
   }
+  @override
+  Future<void> registerVehiculo({
+    required Map<String, dynamic> data,
+    required String token,
+  }){
+    return datasource.registerVehiculo(data: data, token: token);
+  }
 }

@@ -3,4 +3,9 @@ abstract class PropietarioRepository{
     required Map<String, dynamic> data,
     required String token,
   });
+  Future<void> registerVehiculo({
+    required Map<String, dynamic> data,
+    required String token,
+  });
 }
+

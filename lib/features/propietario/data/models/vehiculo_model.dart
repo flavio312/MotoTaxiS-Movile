@@ -1,6 +1,6 @@
 
 class VehiculoModel {
-  final int?   idVehiculo;
+  final int   idVehiculo;
   final String matricula;
   final String modelo;
   final String color;
@@ -9,7 +9,7 @@ class VehiculoModel {
   final String? fechaAdquisicion;
 
   const VehiculoModel({
-    this.idVehiculo,
+    required this.idVehiculo,
     required this.matricula,
     required this.modelo,
     required this.color,
@@ -19,7 +19,7 @@ class VehiculoModel {
   });
 
   factory VehiculoModel.fromJson(Map<String, dynamic> json) => VehiculoModel(
-    idVehiculo:      json['idVehiculo'] as int?,
+    idVehiculo:      json['idVehiculo'] as int,
     matricula:       json['matricula'] as String,
     modelo:          json['modelo'] as String,
     color:           json['color'] as String,
