@@ -37,6 +37,9 @@ import 'package:viajeseguro/features/propietario/data/datasource/propietario_dat
 import 'package:viajeseguro/features/propietario/data/repository/propietario_repository_impl.dart';
 import 'package:viajeseguro/features/propietario/domain/usecases/register_propietario.dart';
 import 'package:viajeseguro/features/propietario/presentation/providers/propietario_provider.dart';
+import 'package:viajeseguro/features/propietario/domain/usecases/register_vehiculo.dart';
+import 'package:viajeseguro/features/propietario/presentation/providers/vehiculo_provider.dart';
+import 'package:viajeseguro/features/propietario/domain/usecases/get_vehiculos.dart';
 import 'myapp.dart';
 
 Future<void> main() async {
@@ -84,6 +87,7 @@ Future<void> main() async {
     datasource: PropietarioDatasource(httpClient: ApiConfig.httpClient),
   );
   final registerPropietario = RegisterPropietario(propietarioRepository);
+  final registerVehiculo = RegisterVehiculo(propietarioRepository);
 
   runApp(
     MultiProvider(
@@ -118,6 +122,12 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (_) => PropietarioProvider(
             registerProietarioUseCase: registerPropietario,
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => VehiculoProvider(
+            registerVehiculo: registerVehiculo,
+            getVehiculos: GetVehiculos(propietarioRepository),
           ),
         ),
       ],

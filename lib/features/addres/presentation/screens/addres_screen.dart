@@ -30,7 +30,7 @@ class _AddressScreenState extends State<AddressScreen> {
 
   final List<String> municipios = ['Tumbalá', 'Palenque', 'San Cristóbal de las Casas'];
   final Map<String, List<String>> asentamientos = {
-    'Tumbalá': ['Centro', 'San Pedro'],
+    'Tumbalá': ['Centro', 'Guadalupe'],
     'Palenque': ['San Juan', 'La Esperanza'],
     'San Cristóbal de las Casas': ['La Merced', 'Barrio El Cerrillo']
   };
@@ -130,14 +130,13 @@ class _AddressScreenState extends State<AddressScreen> {
                       onChanged: (String? val) {
                         setState(() {
                           _selectedMunicipio = val;
-                          _selectedAsentamiento = null; // reset asentamiento
+                          _selectedAsentamiento = null;
                         });
                       },
                       decoration: const InputDecoration(labelText: 'Municipio'),
                     ),
                     const SizedBox(height: 12),
 
-                    // Asentamiento dependiente del municipio
                     DropdownButtonFormField<String>(
                       value: _selectedAsentamiento,
                       items: (_selectedMunicipio != null
@@ -189,12 +188,10 @@ class _AddressScreenState extends State<AddressScreen> {
                       onPressed: context.watch<AddresProvider>().isLoading
                           ? null
                           : () async {
-                        // Validaciones
                         if (_selectedMunicipio == null ||
                             _selectedAsentamiento == null ||
                             _cpCtrl.text.isEmpty ||
-                            _calleCtrl.text.isEmpty ||
-                            _exteriorCtrl.text.isEmpty) {
+                            _calleCtrl.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Completa todos los campos')),
                           );

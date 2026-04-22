@@ -1,3 +1,4 @@
+import 'package:viajeseguro/features/propietario/data/models/vehiculo_model.dart';
 import '../../domain/repository/propietario_repository.dart';
 import '../datasource/propietario_datasource.dart';
 
@@ -19,5 +20,10 @@ class PropietarioRepositoryImpl implements PropietarioRepository{
     required String token,
   }){
     return datasource.registerVehiculo(data: data, token: token);
+  }
+
+  @override
+  Future<List<VehiculoModel>> getVehiculos(String token) {
+    return datasource.getVehiculos(token);
   }
 }

@@ -53,6 +53,7 @@ class AuthProvider with ChangeNotifier {
           (user) {
         _status = AuthStatus.authenticated;
         _auth = user;
+        _rol = user.rol;
         notifyListeners();
       },
     );
@@ -73,10 +74,10 @@ class AuthProvider with ChangeNotifier {
         _errorMessage = failure.message;
         notifyListeners();
         return false;
-      },
-          (user) {
+      }, (user) {
         _status = AuthStatus.authenticated;
         _auth = user;
+        _rol = user.rol;
         _errorMessage = null;
         notifyListeners();
         return true;

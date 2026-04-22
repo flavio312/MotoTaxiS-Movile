@@ -1,60 +1,37 @@
+import '../../domain/entities/vehiculo.dart';
 
-class VehiculoModel {
-  final int   idVehiculo;
-  final String matricula;
-  final String modelo;
-  final String color;
-  final String estatus;
-  final String? conductor;
-  final String? fechaAdquisicion;
-
+class VehiculoModel extends Vehiculo{
   const VehiculoModel({
-    required this.idVehiculo,
-    required this.matricula,
-    required this.modelo,
-    required this.color,
-    required this.estatus,
-    this.conductor,
-    this.fechaAdquisicion,
+    required super.idVehiculo,
+    required super.inmatriculacion,
+    required super.idModelo,
+    required super.color,
+    required super.fechaAdquisicion,
+    required super.estatus,
+    required super.descripcion,
   });
 
-  factory VehiculoModel.fromJson(Map<String, dynamic> json) => VehiculoModel(
-    idVehiculo:      json['idVehiculo'] as int,
-    matricula:       json['matricula'] as String,
-    modelo:          json['modelo'] as String,
-    color:           json['color'] as String,
-    estatus:         json['estatus'] as String,
-    conductor:       json['conductor'] as String?,
-    fechaAdquisicion: json['fechaAdquisicion'] as String?,
-  );
+  factory VehiculoModel.fromJson(Map<String, dynamic> json) {
+    return VehiculoModel(
+      idVehiculo: json['idVehiculo'] ?? 0,
+      inmatriculacion: json['matricula'] ?? '',
+      idModelo: (json['modelo'] ?? 0) as int,
+      color: json['color'] ?? '',
+      fechaAdquisicion: json['fechaAdquisicion'] ?? '',
+      estatus: json['estatus'] ?? '',
+      descripcion: json['descripcion'] ?? '',
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-    if (idVehiculo != null) 'idVehiculo': idVehiculo,
-    'matricula':       matricula,
-    'modelo':          modelo,
-    'color':           color,
-    'estatus':         estatus,
-    if (conductor != null) 'conductor': conductor,
-    if (fechaAdquisicion != null) 'fechaAdquisicion': fechaAdquisicion,
-  };
-
-  // Mock data para prototipar
-  static List<VehiculoModel> get mockList => [
-    const VehiculoModel(
-      idVehiculo: 1,
-      matricula: 'ABC-1234',
-      modelo: 'Honda CG 150',
-      color: 'Rojo',
-      estatus: 'Activo',
-      conductor: 'DL Flavio',
-    ),
-    const VehiculoModel(
-      idVehiculo: 2,
-      matricula: 'XYZ-5678',
-      modelo: 'Yamaha FZ 250',
-      color: 'Negro',
-      estatus: 'Activo',
-      conductor: 'Conductor 2',
-    ),
-  ];
+  factory VehiculoModel.fromEntity(Vehiculo vehiculo){
+    return VehiculoModel(
+      idVehiculo: vehiculo.idVehiculo,
+        inmatriculacion: vehiculo.inmatriculacion,
+        idModelo: vehiculo.idModelo,
+        color: vehiculo.color,
+        fechaAdquisicion: vehiculo.fechaAdquisicion,
+        estatus: vehiculo.estatus,
+        descripcion: vehiculo.descripcion,
+    );
+  }
 }

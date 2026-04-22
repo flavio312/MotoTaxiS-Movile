@@ -32,18 +32,14 @@ class VehiculoCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(vehiculo.conductor ?? 'Sin conductor',
-                    style: GoogleFonts.poppins(
-                        fontSize: 14, fontWeight: FontWeight.w700)),
-                const SizedBox(height: 2),
-                Text(vehiculo.matricula,
+                Text(vehiculo.inmatriculacion,
                     style: GoogleFonts.poppins(
                         fontSize: 13, color: AppColors.textSecondary)),
                 const SizedBox(height: 2),
                 Text(vehiculo.estatus,
                     style: GoogleFonts.poppins(
                         fontSize: 12,
-                        color: vehiculo.estatus == 'Activo'
+                        color: vehiculo.estatus == 'activo'
                             ? Colors.green
                             : AppColors.textSecondary)),
               ],

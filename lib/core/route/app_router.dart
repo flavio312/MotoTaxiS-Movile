@@ -70,7 +70,7 @@ class AppRouter {
         if (isLogin || isRegister || isProfile || isAddress || isRegistroConductor || isRegistroPropietario || isJornadaConductor) return null;
         return RoutePaths.login;
       }
-      if (isLogin || isRegister) {
+      if (isLogin) {
         switch (rol?.toLowerCase()) {
           case 'pasajero':
             return RoutePaths.service;
@@ -83,7 +83,6 @@ class AppRouter {
         }
       }
       return null;
-
     },
 
     routes: [

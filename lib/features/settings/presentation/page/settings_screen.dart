@@ -71,7 +71,8 @@ class SettingsScreen extends StatelessWidget {
 
                   InkWell(
                     onTap: () async {
-                      AppNavigation.goToLogin(context);
+                      final authProvider = context.read<AuthProvider>();
+                      await authProvider.logout();
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),

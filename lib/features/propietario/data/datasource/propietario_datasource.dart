@@ -1,4 +1,5 @@
 import 'package:viajeseguro/core/network/http_client.dart';
+import 'package:viajeseguro/features/propietario/data/models/vehiculo_model.dart';
 
 class PropietarioDatasource {
   final HttpClient httpClient;
@@ -22,11 +23,24 @@ class PropietarioDatasource {
     required String token,
   })async{
     await httpClient.post(
-      endpoint: '/vehiculos',
+      endpoint: '/usuarios/vehiculos',
       body: data,
       headers: {
         'Authorization': 'Bearer $token',
       },
     );
+  }
+
+  Future<List<VehiculoModel>> getVehiculos(String token) async {
+    final response = await httpClient.get(
+      endpoint: '/usuarios/vehiculos',
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    final List data = response.data;
+
+    return data.map((e) => VehiculoModel.fromJson(e)).toList();
   }
 }

@@ -37,10 +37,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (mounted) {
         if (success) {
-          print('Login exitoso');
-          AppNavigation.goToService(context);
-        } else {
-          print('Login falló: ${authProvider.errorMessage}');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(authProvider.errorMessage ?? 'Credenciales incorrectas'),
