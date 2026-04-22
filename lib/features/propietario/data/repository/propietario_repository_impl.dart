@@ -26,4 +26,28 @@ class PropietarioRepositoryImpl implements PropietarioRepository{
   Future<List<VehiculoModel>> getVehiculos(String token) {
     return datasource.getVehiculos(token);
   }
+
+  @override
+  Future<void> updateVehiculo({
+    required int idVehiculo,
+    required Map<String, dynamic> data,
+    required String token,
+  }) {
+    return datasource.updateVehiculo(
+      idVehiculo: idVehiculo,
+      data: data,
+      token: token,
+    );
+  }
+
+  @override
+  Future<void> changeVehiculoStatus({
+    required int idVehiculo,
+    required String token,
+  }) {
+    return datasource.changeVehiculoStatus(
+      idVehiculo: idVehiculo,
+      token: token,
+    );
+  }
 }

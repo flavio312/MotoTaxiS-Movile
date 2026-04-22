@@ -14,10 +14,8 @@ class HomeConductorScreen extends StatefulWidget {
 }
 
 class _HomeConductorScreenState extends State<HomeConductorScreen> {
-  // Estado del conductor
   bool _habilitado = true;
 
-  // Lista de solicitudes (mock — conectar a socket en implementación real)
   final List<SolicitudModel> _solicitudes = SolicitudModel.mockList;
 
   @override
@@ -72,7 +70,6 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
                     ),
                     const SizedBox(height: 14),
 
-                    // ── Compartir info ────────────────
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -111,7 +108,6 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
   }
 }
 
-// ── Chip de estado Habilitado / Deshabilitado ─────────────────────────────
 class _EstadoChip extends StatelessWidget {
   final String label;
   final bool isSelected;

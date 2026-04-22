@@ -11,5 +11,15 @@ abstract class PropietarioRepository{
   });
 
   Future<List<VehiculoModel>> getVehiculos(String token);
+
+  Future<void> updateVehiculo({
+    required int idVehiculo,
+    required Map<String, dynamic> data,
+    required String token,
+  });
+  Future<void> changeVehiculoStatus({
+    required int idVehiculo,
+    required String token,
+  });
 }
 

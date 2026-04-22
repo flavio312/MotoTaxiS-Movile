@@ -2,12 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:viajeseguro/features/propietario/data/models/vehiculo_model.dart';
 import '../../domain/usecases/register_vehiculo.dart';
 import '../../domain/usecases/get_vehiculos.dart';
+import '../../domain/usecases/change_vehiculo_status.dart';
+import '../../domain/usecases/update_vehiculo.dart';
 
 class VehiculoProvider extends ChangeNotifier {
   final RegisterVehiculo registerVehiculo;
   final GetVehiculos getVehiculos;
+  final ChangeVehiculoStatus changeVehiculoStatus;
+  final UpdateVehiculo updateVehiculo;
 
-  VehiculoProvider({required this.registerVehiculo , required this.getVehiculos});
+  VehiculoProvider({
+    required this.registerVehiculo,
+    required this.getVehiculos,
+    required this.changeVehiculoStatus,
+    required this.updateVehiculo,});
 
   List<VehiculoModel> _vehiculos = [];
   bool _isLoading = false;

@@ -70,6 +70,34 @@ class HttpClient {
     }
   }
 
+  Future<Map<String, dynamic>> put({
+    required String endpoint,
+    required Map<String, dynamic> body,
+    Map<String, String>? headers,
+  }) async {
+    final url = Uri.parse('$baseUrl$endpoint');
+    final token = await _authService.getToken();
+
+    final response = await http.put(
+      url,
+      body: jsonEncode(body),
+      headers: {
+        'Content-Type': 'application/json',
+        if(token != null) 'Authorization': 'Bearer $token',
+        ...?headers,
+      },
+    );
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      if (response.body.isEmpty) {
+        throw Exception("Respuesta vacía del servidor");
+      }
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } else {
+      throw Exception("Error ${response.statusCode}: ${response.body}");
+    }
+  }
+
   Future<void> delete({required String endpoint}) async {
     final url = Uri.parse('$baseUrl$endpoint');
     final response = await http.delete(url);
@@ -96,7 +124,6 @@ class HttpClient {
       },
     );
 
-    // 🔥 401 = sesión expirada
     if (response.statusCode == 401) {
       await _authService.clearSession();
       throw Exception('SESSION_EXPIRED');

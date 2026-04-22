@@ -18,6 +18,7 @@ class PropietarioDatasource {
       },
     );
   }
+
   Future<void> registerVehiculo({
     required Map<String, dynamic> data,
     required String token,
@@ -42,5 +43,35 @@ class PropietarioDatasource {
     final List data = response.data;
 
     return data.map((e) => VehiculoModel.fromJson(e)).toList();
+  }
+
+  Future<void> updateVehiculo({
+    required int idVehiculo,
+    required Map<String, dynamic> data,
+    required String token,
+  }) async {
+    await httpClient.put(
+      endpoint: '/usuarios/vehiculos/$idVehiculo',
+      body: data,
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+  }
+
+  Future<void> changeVehiculoStatus({
+    required int idVehiculo,
+    required String token,
+  }) async {
+    await httpClient.put(
+      endpoint: '/usuarios/vehiculos/$idVehiculo/status',
+      body: {
+        "estatus": "inactivo",
+        "descripcion": "Eliminado desde app"
+      },
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
   }
 }

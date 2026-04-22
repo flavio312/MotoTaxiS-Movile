@@ -40,6 +40,8 @@ import 'package:viajeseguro/features/propietario/presentation/providers/propieta
 import 'package:viajeseguro/features/propietario/domain/usecases/register_vehiculo.dart';
 import 'package:viajeseguro/features/propietario/presentation/providers/vehiculo_provider.dart';
 import 'package:viajeseguro/features/propietario/domain/usecases/get_vehiculos.dart';
+import 'package:viajeseguro/features/propietario/domain/usecases/change_vehiculo_status.dart';
+import 'package:viajeseguro/features/propietario/domain/usecases/update_vehiculo.dart';
 import 'myapp.dart';
 
 Future<void> main() async {
@@ -88,6 +90,9 @@ Future<void> main() async {
   );
   final registerPropietario = RegisterPropietario(propietarioRepository);
   final registerVehiculo = RegisterVehiculo(propietarioRepository);
+  final getVehiculos = GetVehiculos(propietarioRepository);
+  final updateVehiculo = UpdateVehiculo(propietarioRepository);
+  final changeVehiculoStatus = ChangeVehiculoStatus(propietarioRepository);
 
   runApp(
     MultiProvider(
@@ -127,7 +132,9 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (_) => VehiculoProvider(
             registerVehiculo: registerVehiculo,
-            getVehiculos: GetVehiculos(propietarioRepository),
+            getVehiculos: getVehiculos,
+            updateVehiculo: updateVehiculo,
+            changeVehiculoStatus: changeVehiculoStatus
           ),
         ),
       ],

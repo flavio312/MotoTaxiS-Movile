@@ -16,7 +16,6 @@ class PrivacyScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header title centered
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
               child: Center(
