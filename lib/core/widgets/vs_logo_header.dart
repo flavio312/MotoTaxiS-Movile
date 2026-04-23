@@ -29,7 +29,7 @@ class VsLogoHeader extends StatelessWidget {
           ),
           child: Center(
             child: Image.asset(
-              'assets/mototaxi.png',
+              'assets/jaguar.png',
               width: 200,
               height: 130,
               fit: BoxFit.contain,

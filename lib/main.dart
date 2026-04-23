@@ -42,6 +42,11 @@ import 'package:viajeseguro/features/propietario/presentation/providers/vehiculo
 import 'package:viajeseguro/features/propietario/domain/usecases/get_vehiculos.dart';
 import 'package:viajeseguro/features/propietario/domain/usecases/change_vehiculo_status.dart';
 import 'package:viajeseguro/features/propietario/domain/usecases/update_vehiculo.dart';
+// ----------- DATES OF THE GET ME
+import 'package:viajeseguro/features/settings/presentation/providers/settings_provider.dart';
+import 'package:viajeseguro/features/settings/domain/usecases/get_me.dart';
+import 'package:viajeseguro/features/settings/data/datasource/settings_datasource.dart';
+import 'package:viajeseguro/features/settings/data/repository/settings_repository_impl.dart';
 import 'myapp.dart';
 
 Future<void> main() async {
@@ -94,6 +99,13 @@ Future<void> main() async {
   final updateVehiculo = UpdateVehiculo(propietarioRepository);
   final changeVehiculoStatus = ChangeVehiculoStatus(propietarioRepository);
 
+  // Settings setup
+ final settingsRepository = SettingsRepositoryImpl(
+   datasource: SettingsDatasource(httpClient: ApiConfig.httpClient),
+ );
+ final getMe = GetMe(settingsRepository);
+
+
   runApp(
     MultiProvider(
       providers: [
@@ -135,6 +147,11 @@ Future<void> main() async {
             getVehiculos: getVehiculos,
             updateVehiculo: updateVehiculo,
             changeVehiculoStatus: changeVehiculoStatus
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => UserProfileProvider(
+            getMe: getMe,
           ),
         ),
       ],

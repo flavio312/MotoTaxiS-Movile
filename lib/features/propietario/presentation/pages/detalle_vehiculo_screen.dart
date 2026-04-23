@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:viajeseguro/core/route/app_navigation.dart';
-import 'package:viajeseguro/core/route/app_router.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 import 'package:viajeseguro/core/widgets/vs_bottom_nav.dart';
 import 'package:viajeseguro/core/widgets/vs_text_field.dart';
 import 'package:viajeseguro/features/propietario/data/models/vehiculo_model.dart';
 
 class DetalleVehiculoScreen extends StatefulWidget {
-  final VehiculoModel? vehiculo; // null = modo vista, not-null = modo edición
+  final VehiculoModel? vehiculo;
   const DetalleVehiculoScreen({super.key, this.vehiculo});
 
   @override
@@ -17,8 +15,8 @@ class DetalleVehiculoScreen extends StatefulWidget {
 }
 
 class _DetalleVehiculoScreenState extends State<DetalleVehiculoScreen> {
-  late final TextEditingController _matriculaCtrl;
-  late final TextEditingController _modeloCtrl;
+  late final TextEditingController _inmatriculacionCtrl;
+  late final TextEditingController _idModeloCtrl;
   late final TextEditingController _estatusCtrl;
 
   // Color seleccionado (el diseño muestra un bloque rojo)
@@ -27,18 +25,18 @@ class _DetalleVehiculoScreenState extends State<DetalleVehiculoScreen> {
   @override
   void initState() {
     super.initState();
-    _matriculaCtrl = TextEditingController(
-        text: widget.vehiculo?.matricula ?? '');
-    _modeloCtrl    = TextEditingController(
-        text: widget.vehiculo?.modelo ?? '');
+    _inmatriculacionCtrl = TextEditingController(
+        text: widget.vehiculo?.inmatriculacion ?? '');
+    _idModeloCtrl = TextEditingController(
+        text: widget.vehiculo?.idModelo.toString() ?? '');
     _estatusCtrl   = TextEditingController(
         text: widget.vehiculo?.estatus ?? '');
   }
 
   @override
   void dispose() {
-    _matriculaCtrl.dispose();
-    _modeloCtrl.dispose();
+    _inmatriculacionCtrl.dispose();
+    _idModeloCtrl.dispose();
     _estatusCtrl.dispose();
     super.dispose();
   }
@@ -50,7 +48,6 @@ class _DetalleVehiculoScreenState extends State<DetalleVehiculoScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // ── Header ──────────────────────────────
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Center(
@@ -68,25 +65,22 @@ class _DetalleVehiculoScreenState extends State<DetalleVehiculoScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ── Matrícula ─────────────────────
                     Text('Matriula',
                         style: GoogleFonts.poppins(
                             fontSize: 12, color: AppColors.textSecondary)),
                     const SizedBox(height: 6),
                     VsTextField(
                       label: '',
-                      controller: _matriculaCtrl,
+                      controller: _inmatriculacionCtrl,
                     ),
                     const SizedBox(height: 16),
-
-                    // ── Modelo ────────────────────────
                     Text('Modelo',
                         style: GoogleFonts.poppins(
                             fontSize: 12, color: AppColors.textSecondary)),
                     const SizedBox(height: 6),
                     VsTextField(
                       label: '',
-                      controller: _modeloCtrl,
+                      controller: _idModeloCtrl,
                     ),
                     const SizedBox(height: 16),
 

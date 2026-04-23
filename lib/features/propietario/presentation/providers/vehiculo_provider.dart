@@ -45,12 +45,15 @@ class VehiculoProvider extends ChangeNotifier {
 
   Future<void> loadVehiculos(String token) async {
     _isLoading = true;
+    _error = null;
     notifyListeners();
 
     try {
       _vehiculos = await getVehiculos(token);
+      print('Vehículos cargados: ${_vehiculos.length}'); // ← debug
     } catch (e) {
       _error = e.toString();
+      print('Error al cargar vehículos: $e');
     }
 
     _isLoading = false;

@@ -7,7 +7,6 @@ import '../models/person_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<LoginResponseModel> login(LoginRequestModel request);
-  Future<void> logout();
   Future<UserModel> getCurrentUser(String token);
 
   Future<LoginResponseModel> register({
@@ -53,15 +52,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
       return loginResponse;
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
-  }
-
-  @override
-  Future<void> logout() async {
-    try {
-      await httpClient.post(endpoint: '/auth/logout', body: {});
     } catch (e) {
       throw ServerException(e.toString());
     }

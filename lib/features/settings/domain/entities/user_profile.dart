@@ -1,35 +1,29 @@
 import 'package:equatable/equatable.dart';
 
-class Auth extends Equatable{
+class UserProfile extends Equatable {
   final int idUsuario;
   final String nombreUsuario;
-  final String password;
+  final String correoElectronico;
+  final String telefono;
   final String rol;
-  final String token;
   final String estadoCuenta;
   final String fechaRegistro;
   final String? fotoPerfil;
 
-  const Auth({
+  const UserProfile({
     required this.idUsuario,
     required this.nombreUsuario,
-    required this.password,
+    required this.correoElectronico,
+    required this.telefono,
     required this.rol,
-    required this.token,
     required this.estadoCuenta,
     required this.fechaRegistro,
-    required this.fotoPerfil
+    this.fotoPerfil,
   });
+
   @override
-  // TODO: implement props
   List<Object?> get props => [
-    idUsuario,
-    nombreUsuario,
-    password,
-    rol,
-    token,
-    estadoCuenta,
-    fechaRegistro,
-    fotoPerfil
+    idUsuario, nombreUsuario, correoElectronico, telefono,
+    rol, estadoCuenta, fechaRegistro, fotoPerfil,
   ];
 }

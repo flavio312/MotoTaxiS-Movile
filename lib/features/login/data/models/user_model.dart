@@ -6,6 +6,7 @@ class UserModel extends Auth{
     required super.nombreUsuario,
     required super.password,
     required super.rol,
+    required super.token,
     required super.estadoCuenta,
     required super.fechaRegistro,
     required super.fotoPerfil
@@ -17,6 +18,7 @@ class UserModel extends Auth{
         nombreUsuario: json['nombreUsuario'] ?? '',
         password: json['password'] ?? '',
         rol: json['rol'] ?? '',
+        token: json['token'] ?? '',
         estadoCuenta: json['estadoCuenta'] ?? '',
         fechaRegistro: json['fechaRegistro'] ?? '',
         fotoPerfil: json['fotoPerfil'] ?? ''
@@ -28,6 +30,7 @@ class UserModel extends Auth{
       'idUsuario':idUsuario,
       'nombreUsuario':nombreUsuario,
       'rol':rol,
+      'token':token,
       'estadoCuenta':estadoCuenta,
       'fechaRegistro':fechaRegistro
     };
@@ -39,6 +42,7 @@ class UserModel extends Auth{
         nombreUsuario: auth.nombreUsuario,
         password: auth.password,
         rol: auth.rol,
+        token: auth.token,
         estadoCuenta: auth.estadoCuenta,
         fechaRegistro: auth.fechaRegistro,
         fotoPerfil: auth.fotoPerfil

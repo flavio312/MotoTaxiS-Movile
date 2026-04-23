@@ -14,8 +14,8 @@ class VehiculoModel extends Vehiculo{
   factory VehiculoModel.fromJson(Map<String, dynamic> json) {
     return VehiculoModel(
       idVehiculo: json['idVehiculo'] ?? 0,
-      inmatriculacion: json['matricula'] ?? '',
-      idModelo: (json['modelo'] ?? 0) as int,
+      inmatriculacion: json['inmatriculacion'] ?? '',
+      idModelo: (json['idModelo'] ?? 0) as int,
       color: json['color'] ?? '',
       fechaAdquisicion: json['fechaAdquisicion'] ?? '',
       estatus: json['estatus'] ?? '',
