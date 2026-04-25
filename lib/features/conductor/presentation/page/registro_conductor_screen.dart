@@ -123,7 +123,6 @@ class _RegistroConductorScreenState extends State<RegistroConductorScreen> {
                     ),
                     const SizedBox(height: 14),
 
-                    // ── Guardar ──────────────────────
                     ElevatedButton(
                       onPressed: () {
                         final data = {

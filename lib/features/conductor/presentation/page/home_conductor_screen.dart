@@ -25,7 +25,6 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // ── Top bar ─────────────────────────────
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               child: Row(
@@ -48,7 +47,6 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ── Estatus ──────────────────────
                     Text('Estatus',
                         style: GoogleFonts.poppins(
                             fontSize: 14, fontWeight: FontWeight.w600)),
@@ -88,7 +86,6 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
                     ),
                     const SizedBox(height: 20),
 
-                    // ── Lista de solicitudes ──────────
                     ..._solicitudes.map((s) => SolicitudCard(
                       solicitud: s,
                       onAceptar: () => AppNavigation.goToSolicitudEntrante(context),

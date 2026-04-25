@@ -48,11 +48,11 @@ class _JornadaConductorScreenState extends State<JornadaConductorScreen> {
   }
   String formatDate(dynamic date) {
     if (date is String) {
-      return date; // ya está en formato yyyy-MM-dd
+      return date;
     } else if (date is DateTime) {
       return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
     } else {
-      throw ArgumentError("Unsupported type for formatDate");
+      throw ArgumentError("Formato de fecha no válido");
     }
   }
 
