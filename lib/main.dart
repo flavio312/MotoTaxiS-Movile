@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:viajeseguro/core/network/http_client.dart';
 import 'package:viajeseguro/core/network/api_config.dart';
 import 'package:viajeseguro/features/conductor/domain/usecase/register_conductor.dart';
@@ -47,19 +48,40 @@ import 'package:viajeseguro/features/settings/presentation/providers/settings_pr
 import 'package:viajeseguro/features/settings/domain/usecases/get_me.dart';
 import 'package:viajeseguro/features/settings/data/datasource/settings_datasource.dart';
 import 'package:viajeseguro/features/settings/data/repository/settings_repository_impl.dart';
+// -----------SOCKET + MAPA
+import 'package:viajeseguro/features/conductor/data/datasource/socket_datasource.dart';
+import 'package:viajeseguro/features/conductor/data/datasource/maps_datasource.dart';
+import 'package:viajeseguro/features/conductor/data/repositories/maps_repository_impl.dart';
+import 'package:viajeseguro/features/conductor/data/repositories/servicio_repository_impl.dart';
+import 'package:viajeseguro/features/conductor/domain/usecase/aceptar_servicio_usecase.dart';
+import 'package:viajeseguro/features/conductor/domain/usecase/emitir_tracking_usecase.dart';
+import 'package:viajeseguro/features/conductor/domain/usecase/escuchar_ubicacion_usecase.dart';
+import 'package:viajeseguro/features/conductor/domain/usecase/obtener_ruta_usecase.dart';
+import 'package:viajeseguro/features/conductor/presentation/providers/mapa_provider.dart';
+import 'package:viajeseguro/features/conductor/presentation/providers/servicio_provider.dart';
+
 import 'myapp.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   final sharedPreferences = await SharedPreferences.getInstance();
-  final httpClient = HttpClient(
-    baseUrl: dotenv.env['API_BASE_URL']!,
-  );
 
-  // --- Auth setup ---
-  final authRemoteDataSource = AuthRemoteDataSourceImpl(httpClient: httpClient);
-  final authLocalDataSource = AuthLocalDataSourceImpl(sharedPreferences: sharedPreferences);
+  final httpClient = HttpClient(baseUrl: dotenv.env['API_BASE_URL']!);
+
+  final socket = IO.io(
+    dotenv.env['SOCKET_URL']!,
+    IO.OptionBuilder()
+        .setTransports(['websocket'])
+        .disableAutoConnect()
+        .build(),
+  );
+  socket.connect();
+
+  final authRemoteDataSource =
+  AuthRemoteDataSourceImpl(httpClient: httpClient);
+  final authLocalDataSource =
+  AuthLocalDataSourceImpl(sharedPreferences: sharedPreferences);
   final authRepository = AuthRepositoryImpl(
     remoteDataSource: authRemoteDataSource,
     localDataSource: authLocalDataSource,
@@ -67,48 +89,59 @@ Future<void> main() async {
   final loginUser = AuthLogin(authRepository);
   final logoutUser = LogoutUser(authRepository);
   final getCurrentUser = GetCurrentUser(authRepository);
-  // --- Person setup ---
+
+  // ── Person ──────────────────────────────────────────────────────────────
   final personRepository = PersonRepositoryImpl(
     datasource: PersonDatasource(httpClient: ApiConfig.httpClient),
   );
   final registerPerson = RegisterPerson(personRepository);
-  // --- Profile setup ---
+
+  // ── Profile ─────────────────────────────────────────────────────────────
   final profileRepository = ProfileRepositoryImpl(
     datasource: ProfileDatasource(httpClient: ApiConfig.httpClient),
   );
   final createUser = CreateUser(repository: profileRepository);
 
-  // Address setup
+  // ── Address ─────────────────────────────────────────────────────────────
   final addresRepository = AddresRepositoryImpl(
     datasource: AddresDatasource(httpClient: ApiConfig.httpClient),
   );
   final registerAddres = RegisterAddres(repository: addresRepository);
 
-  // Conductor setup
+  // ── Conductor ───────────────────────────────────────────────────────────
   final conductorRepository = ConductorRepositoryImpl(
     datasource: ConductorDatasource(httpClient: ApiConfig.httpClient),
   );
   final registerConductor = RegisterConductor(conductorRepository);
-  // Propietario setup
+
+  // ── Propietario ─────────────────────────────────────────────────────────
   final propietarioRepository = PropietarioRepositoryImpl(
     datasource: PropietarioDatasource(httpClient: ApiConfig.httpClient),
   );
   final registerPropietario = RegisterPropietario(propietarioRepository);
-  final registerVehiculo = RegisterVehiculo(propietarioRepository);
-  final getVehiculos = GetVehiculos(propietarioRepository);
-  final updateVehiculo = UpdateVehiculo(propietarioRepository);
+  final registerVehiculo    = RegisterVehiculo(propietarioRepository);
+  final getVehiculos        = GetVehiculos(propietarioRepository);
+  final updateVehiculo      = UpdateVehiculo(propietarioRepository);
   final changeVehiculoStatus = ChangeVehiculoStatus(propietarioRepository);
 
-  // Settings setup
- final settingsRepository = SettingsRepositoryImpl(
-   datasource: SettingsDatasource(httpClient: ApiConfig.httpClient),
- );
- final getMe = GetMe(settingsRepository);
+  // ── Settings ────────────────────────────────────────────────────────────
+  final settingsRepository = SettingsRepositoryImpl(
+    datasource: SettingsDatasource(httpClient: ApiConfig.httpClient),
+  );
+  final getMe = GetMe(settingsRepository);
 
+  // ── Socket datasource + Servicio repository ──────────────────────────────
+  final socketDatasource   = SocketDatasourceImpl(socket: socket);
+  final servicioRepository = ServicioRepositoryImpl(datasource: socketDatasource);
+
+  // ── Maps ────────────────────────────────────────────────────────────────
+  final mapsDatasource  = MapsDatasourceImpl();
+  final mapsRepository  = MapsRepositoryImpl(mapsDatasource);
 
   runApp(
     MultiProvider(
       providers: [
+        // ── Auth ──────────────────────────────────────────────────────────
         ChangeNotifierProvider(
           create: (_) => AuthProvider(
             loginUseCase: loginUser,
@@ -116,26 +149,31 @@ Future<void> main() async {
             getCurrentUserUseCase: getCurrentUser,
           ),
         ),
+        // ── Person ────────────────────────────────────────────────────────
         ChangeNotifierProvider(
           create: (_) => PersonProvider(
             registerPersonUseCase: registerPerson,
           ),
         ),
+        // ── Profile ───────────────────────────────────────────────────────
         ChangeNotifierProvider(
           create: (_) => ProfileProvider(
             createUserUseCase: createUser,
           ),
         ),
+        // ── Address ───────────────────────────────────────────────────────
         ChangeNotifierProvider(
           create: (_) => AddresProvider(
             registerAddresUseCase: registerAddres,
           ),
         ),
+        // ── Conductor ─────────────────────────────────────────────────────
         ChangeNotifierProvider(
           create: (_) => ConductorProvider(
-              registerConductorUseCase: registerConductor,
-          )
+            registerConductorUseCase: registerConductor,
+          ),
         ),
+        // ── Propietario ───────────────────────────────────────────────────
         ChangeNotifierProvider(
           create: (_) => PropietarioProvider(
             registerProietarioUseCase: registerPropietario,
@@ -143,15 +181,35 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(
           create: (_) => VehiculoProvider(
-            registerVehiculo: registerVehiculo,
-            getVehiculos: getVehiculos,
-            updateVehiculo: updateVehiculo,
-            changeVehiculoStatus: changeVehiculoStatus
+            registerVehiculo:     registerVehiculo,
+            getVehiculos:         getVehiculos,
+            updateVehiculo:       updateVehiculo,
+            changeVehiculoStatus: changeVehiculoStatus,
           ),
         ),
+        // ── Settings ──────────────────────────────────────────────────────
         ChangeNotifierProvider(
           create: (_) => UserProfileProvider(
             getMe: getMe,
+          ),
+        ),
+        // ── ServicioProvider (socket expuesto a las vistas) ───────────────
+        ChangeNotifierProvider(
+          create: (_) => ServicioProvider(
+            aceptarServicio:   AceptarServicioUsecase(servicioRepository),
+            emitirTracking:    EmitirTrackingUsecase(servicioRepository),
+            escucharUbicacion: EscucharUbicacionUsecase(servicioRepository),
+            repository:        servicioRepository,
+            socket:            socket,              // ← socket compartido
+          ),
+        ),
+        // ── MapaProvider (Google Maps + tracking) ─────────────────────────
+        ChangeNotifierProvider(
+          create: (_) => MapaProvider(
+            obtenerRuta:       ObtenerRutaUsecase(mapsRepository),
+            emitirTracking:    EmitirTrackingUsecase(servicioRepository),
+            escucharUbicacion: EscucharUbicacionUsecase(servicioRepository),
+            repository:        servicioRepository,  // ← para unirseServicio
           ),
         ),
       ],

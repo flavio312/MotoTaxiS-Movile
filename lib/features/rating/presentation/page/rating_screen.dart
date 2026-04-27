@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:viajeseguro/core/route/app_navigation.dart';
-import 'package:viajeseguro/core/route/app_router.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 
 class RatingScreen extends StatefulWidget {
@@ -30,7 +28,6 @@ class _RatingScreenState extends State<RatingScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Header
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Center(
@@ -54,7 +51,6 @@ class _RatingScreenState extends State<RatingScreen> {
                           fontSize: 15, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 16),
-                    // Star rating
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(5, (index) {

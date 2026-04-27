@@ -1,11 +1,54 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:viajeseguro/core/route/app_navigation.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 import 'package:viajeseguro/core/widgets/vs_bottom_nav.dart';
-import '../../../../core/route/app_navigation.dart';
+import '../providers/mapa_provider.dart';
 
-class ViajeConductorScreen extends StatelessWidget {
-  const ViajeConductorScreen({super.key});
+class ViajeConductorScreen extends StatefulWidget {
+  final int idServicio;
+  final int idConductor;
+  final double latOrigen;
+  final double lngOrigen;
+  final double latDestino;
+  final double lngDestino;
+
+  const ViajeConductorScreen({
+    super.key,
+    required this.idServicio,
+    required this.idConductor,
+    required this.latOrigen,
+    required this.lngOrigen,
+    required this.latDestino,
+    required this.lngDestino,
+  });
+
+  @override
+  State<ViajeConductorScreen> createState() => _ViajeConductorScreenState();
+}
+
+class _ViajeConductorScreenState extends State<ViajeConductorScreen> {
+  final Completer<GoogleMapController> _mapCompleter = Completer();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<MapaProvider>();
+
+      // 1. Cargar ruta origen → destino en el mapa
+      provider.cargarRuta(
+        LatLng(widget.latOrigen, widget.lngOrigen),
+        LatLng(widget.latDestino, widget.lngDestino),
+      );
+
+      // 2. Iniciar GPS y emitir tracking por socket
+      provider.iniciarTracking(widget.idServicio, widget.idConductor);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +57,7 @@ class ViajeConductorScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // ── Top bar ─────────────────────────────
+            // ── Top bar ─────────────────────────────────────────────────
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               child: Row(
@@ -36,50 +79,36 @@ class ViajeConductorScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    // ── Mapa ─────────────────────────
-                    Container(
-                      height: 200,
-                      decoration: BoxDecoration(
+                    // ── Google Map real ──────────────────────────────────
+                    Consumer<MapaProvider>(
+                      builder: (_, provider, __) => ClipRRect(
                         borderRadius: BorderRadius.circular(14),
-                        color: const Color(0xFFB0BEC5),
-                      ),
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(14),
-                            child: const SizedBox.expand(
-                              child: Center(
-                                child: Icon(Icons.map, size: 70,
-                                    color: Color(0xFF78909C)),
-                              ),
+                        child: SizedBox(
+                          height: 220,
+                          child: GoogleMap(
+                            initialCameraPosition: CameraPosition(
+                              target: LatLng(widget.latOrigen, widget.lngOrigen),
+                              zoom: 15,
                             ),
+                            markers: Set<Marker>.of(provider.markers.values),
+                            polylines: Set<Polyline>.of(provider.polylines.values),
+                            myLocationEnabled: true,
+                            myLocationButtonEnabled: false,
+                            zoomControlsEnabled: false,
+                            mapToolbarEnabled: false,
+                            onMapCreated: (controller) {
+                              provider.mapController = controller;
+                              if (!_mapCompleter.isCompleted) {
+                                _mapCompleter.complete(controller);
+                              }
+                            },
                           ),
-                          // Marker A
-                          Positioned(
-                            left: 50, bottom: 55,
-                            child: _MapPin(label: 'A', color: Colors.red),
-                          ),
-                          // Marker B
-                          Positioned(
-                            right: 50, top: 40,
-                            child: _MapPin(label: 'B', color: Colors.red),
-                          ),
-                          // Punto naranja (conductor)
-                          Positioned(
-                            left: 110, bottom: 80,
-                            child: Container(
-                              width: 12, height: 12,
-                              decoration: const BoxDecoration(
-                                  color: Colors.orange,
-                                  shape: BoxShape.circle),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
 
-                    // ── Tarjeta info viaje ────────────
+                    // ── Info del viaje ───────────────────────────────────
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(18),
@@ -92,10 +121,17 @@ class ViajeConductorScreen extends StatelessWidget {
                         children: [
                           Align(
                             alignment: Alignment.centerRight,
-                            child: Text('En curso',
+                            child: Consumer<MapaProvider>(
+                              builder: (_, p, __) => Text(
+                                p.velocidadActual > 0
+                                    ? '${p.velocidadActual.toStringAsFixed(0)} km/h'
+                                    : 'En curso',
                                 style: GoogleFonts.poppins(
-                                    fontSize: 13, fontWeight: FontWeight.w600,
-                                    color: AppColors.primary)),
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.primary),
+                              ),
+                            ),
                           ),
                           const SizedBox(height: 6),
                           Text('Pasajero: DL Flavio',
@@ -116,26 +152,28 @@ class ViajeConductorScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
 
-                    // ── Terminar el servicio ──────────
+                    // ── Botones ──────────────────────────────────────────
                     _ServiceBtn(
-                      label: 'TERMINAR EL SERVIVIO',
+                      label: 'TERMINAR EL SERVICIO',
                       icon: Icons.lock_outline,
                       color: const Color(0xFF2C2C2C),
                       textColor: Colors.white,
-                      onTap: () => AppNavigation.goToEvaluarUsuario(context),
+                      onTap: () {
+                        context.read<MapaProvider>().detenerTracking();
+                        AppNavigation.goToEvaluarUsuario(context);
+                      },
                     ),
                     const SizedBox(height: 10),
-
-                    // ── Suspender ────────────────────
                     _ServiceBtn(
                       label: 'Suspender servicio',
                       color: AppColors.primary,
                       textColor: Colors.white,
-                      onTap: () => AppNavigation.goToHomeConductor(context),
+                      onTap: () {
+                        context.read<MapaProvider>().detenerTracking();
+                        AppNavigation.goToHomeConductor(context);
+                      },
                     ),
                     const SizedBox(height: 10),
-
-                    // ── Reportar ─────────────────────
                     _ServiceBtn(
                       label: 'Reportar incidente',
                       color: const Color(0xFFD32F2F),
@@ -154,7 +192,7 @@ class ViajeConductorScreen extends StatelessWidget {
   }
 }
 
-// ── Botón de acción del viaje ─────────────────────────────────────────────
+// ── Botón reutilizable ────────────────────────────────────────────────────
 class _ServiceBtn extends StatelessWidget {
   final String label;
   final IconData? icon;
@@ -190,34 +228,12 @@ class _ServiceBtn extends StatelessWidget {
             ],
             Text(label,
                 style: GoogleFonts.poppins(
-                    color: textColor, fontSize: 14,
+                    color: textColor,
+                    fontSize: 14,
                     fontWeight: FontWeight.w700)),
           ],
         ),
       ),
-    );
-  }
-}
-
-// ── Pin de mapa ───────────────────────────────────────────────────────────
-class _MapPin extends StatelessWidget {
-  final String label;
-  final Color color;
-  const _MapPin({required this.label, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(5),
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-          child: Text(label,
-              style: const TextStyle(color: Colors.white,
-                  fontSize: 10, fontWeight: FontWeight.bold)),
-        ),
-        Container(width: 2, height: 8, color: color),
-      ],
     );
   }
 }

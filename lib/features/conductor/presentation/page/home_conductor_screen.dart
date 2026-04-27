@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:viajeseguro/core/route/app_navigation.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 import 'package:viajeseguro/core/widgets/vs_bottom_nav.dart';
 import '../../data/models/solicitud_model.dart';
+import '../providers/servicio_provider.dart';
 import '../widgets/solicitud_card.dart';
 
 class HomeConductorScreen extends StatefulWidget {
-  const HomeConductorScreen({super.key});
+  final int idConductor;
+  const HomeConductorScreen({super.key, required this.idConductor});
 
   @override
   State<HomeConductorScreen> createState() => _HomeConductorScreenState();
@@ -16,7 +19,71 @@ class HomeConductorScreen extends StatefulWidget {
 class _HomeConductorScreenState extends State<HomeConductorScreen> {
   bool _habilitado = true;
 
-  final List<SolicitudModel> _solicitudes = SolicitudModel.mockList;
+  // ── Lista vacía — se llena desde el socket ─────────────────────────────
+  final List<SolicitudModel> _solicitudes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final socket = context.read<ServicioProvider>().socket;
+
+      // 1. Registrar conductor en su sala
+      context.read<ServicioProvider>().registrarConductor(widget.idConductor);
+
+      // 2. Escuchar nuevas solicitudes que manda el backend
+      socket.on('nuevaSolicitud', (data) {
+        if (!mounted) return;
+        try {
+          final nueva = SolicitudModel.fromJson(
+            Map<String, dynamic>.from(data as Map),
+          );
+          setState(() => _solicitudes.insert(0, nueva));
+        } catch (e) {
+          debugPrint('Error parseando solicitud: $e');
+        }
+      });
+
+      // 3. Si el pasajero cancela antes de que el conductor acepte,
+      //    eliminar la solicitud de la lista
+      socket.on('servicioCancelado', (idServicio) {
+        if (!mounted) return;
+        setState(() {
+          _solicitudes.removeWhere((s) => s.idServicio == idServicio);
+        });
+      });
+
+      // 4. Si otro conductor ya tomó el servicio, quitarlo de la lista
+      socket.on('servicioTomado', (data) {
+        if (!mounted) return;
+        final payload = Map<String, dynamic>.from(data as Map);
+        final idServicio = payload['idServicio'] as int;
+        setState(() {
+          _solicitudes.removeWhere((s) => s.idServicio == idServicio);
+        });
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    final socket = context.read<ServicioProvider>().socket;
+    socket.off('nuevaSolicitud');
+    socket.off('servicioCancelado');
+    socket.off('servicioTomado');
+    super.dispose();
+  }
+
+  void _toggleHabilitado(bool valor) {
+    setState(() => _habilitado = valor);
+    context.read<ServicioProvider>().socket.emit('estadoConductor', {
+      'idConductor': widget.idConductor,
+      'disponible':  valor,
+    });
+
+    // Si se deshabilita, limpiar solicitudes pendientes
+    if (!valor) setState(() => _solicitudes.clear());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +92,7 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
       body: SafeArea(
         child: Column(
           children: [
+            // ── Top bar ─────────────────────────────────────────────────
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               child: Row(
@@ -47,6 +115,7 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // ── Estatus ──────────────────────────────────────────
                     Text('Estatus',
                         style: GoogleFonts.poppins(
                             fontSize: 14, fontWeight: FontWeight.w600)),
@@ -56,13 +125,13 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
                         _EstadoChip(
                           label: 'Habilitado',
                           isSelected: _habilitado,
-                          onTap: () => setState(() => _habilitado = true),
+                          onTap: () => _toggleHabilitado(true),
                         ),
                         const SizedBox(width: 10),
                         _EstadoChip(
                           label: 'Deshabilitado',
                           isSelected: !_habilitado,
-                          onTap: () => setState(() => _habilitado = false),
+                          onTap: () => _toggleHabilitado(false),
                         ),
                       ],
                     ),
@@ -80,19 +149,61 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
                         onPressed: () => AppNavigation.goToQrConductor(context),
                         child: Text('Compartir informacion',
                             style: GoogleFonts.poppins(
-                                fontSize: 14, fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
                                 color: Colors.white)),
                       ),
                     ),
                     const SizedBox(height: 20),
 
-                    ..._solicitudes.map((s) => SolicitudCard(
-                      solicitud: s,
-                      onAceptar: () => AppNavigation.goToSolicitudEntrante(context),
-                      onRechazar: () {
-                        setState(() => _solicitudes.remove(s));
-                      },
-                    )),
+                    // ── Lista de solicitudes ─────────────────────────────
+                    if (_solicitudes.isEmpty)
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 40),
+                          child: Column(
+                            children: [
+                              Icon(
+                                _habilitado
+                                    ? Icons.access_time_rounded
+                                    : Icons.pause_circle_outline,
+                                size: 48,
+                                color: AppColors.textSecondary,
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                _habilitado
+                                    ? 'Esperando solicitudes...'
+                                    : 'Estás deshabilitado',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 14,
+                                    color: AppColors.textSecondary),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    else
+                    // Badge con el número de solicitudes pendientes
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${_solicitudes.length} solicitud(es) pendiente(s)',
+                            style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                color: AppColors.textSecondary),
+                          ),
+                          const SizedBox(height: 8),
+                          ..._solicitudes.map((s) => SolicitudCard(
+                            solicitud: s,
+                            onAceptar: () =>
+                                AppNavigation.goToSolicitudEntrante(context),
+                            onRechazar: () =>
+                                setState(() => _solicitudes.remove(s)),
+                          )),
+                        ],
+                      ),
                   ],
                 ),
               ),
@@ -129,7 +240,8 @@ class _EstadoChip extends StatelessWidget {
         ),
         child: Text(label,
             style: GoogleFonts.poppins(
-                fontSize: 13, fontWeight: FontWeight.w500,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
                 color: AppColors.textPrimary)),
       ),
     );
