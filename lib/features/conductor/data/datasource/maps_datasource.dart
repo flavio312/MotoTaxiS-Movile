@@ -8,7 +8,7 @@ abstract class MapsDatasource {
 }
 
 class MapsDatasourceImpl implements MapsDatasource {
-  static const _apiKey = 'AIzaSyDn4XyQoUTrqlR-OyfPp47hW2heGEo8CnM';
+  static const _apiKey = 'MAPS_API_KEY';
 
   @override
   Future<List<LatLng>> obtenerRuta(LatLng origen, LatLng destino) async {
