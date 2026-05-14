@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:viajeseguro/core/route/app_navigation.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 import 'package:viajeseguro/core/widgets/vs_bottom_nav.dart';
-import '../../data/models/solicitud_model.dart';
-import '../providers/servicio_provider.dart';
-import '../widgets/solicitud_card.dart';
+import 'package:viajeseguro/features/conductor/data/models/solicitud_model.dart';
+import 'package:viajeseguro/features/conductor/presentation/providers/servicio_provider.dart';
+import 'package:viajeseguro/features/conductor/presentation/widgets/solicitud_card.dart';
 
 class HomeConductorScreen extends StatefulWidget {
   final int idConductor;
@@ -19,7 +19,6 @@ class HomeConductorScreen extends StatefulWidget {
 class _HomeConductorScreenState extends State<HomeConductorScreen> {
   bool _habilitado = true;
 
-  // ── Lista vacía — se llena desde el socket ─────────────────────────────
   final List<SolicitudModel> _solicitudes = [];
 
   @override
@@ -28,10 +27,8 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final socket = context.read<ServicioProvider>().socket;
 
-      // 1. Registrar conductor en su sala
       context.read<ServicioProvider>().registrarConductor(widget.idConductor);
 
-      // 2. Escuchar nuevas solicitudes que manda el backend
       socket.on('nuevaSolicitud', (data) {
         if (!mounted) return;
         try {
@@ -44,8 +41,6 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
         }
       });
 
-      // 3. Si el pasajero cancela antes de que el conductor acepte,
-      //    eliminar la solicitud de la lista
       socket.on('servicioCancelado', (idServicio) {
         if (!mounted) return;
         setState(() {
@@ -53,7 +48,6 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
         });
       });
 
-      // 4. Si otro conductor ya tomó el servicio, quitarlo de la lista
       socket.on('servicioTomado', (data) {
         if (!mounted) return;
         final payload = Map<String, dynamic>.from(data as Map);
@@ -92,7 +86,6 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // ── Top bar ─────────────────────────────────────────────────
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               child: Row(
@@ -115,7 +108,6 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ── Estatus ──────────────────────────────────────────
                     Text('Estatus',
                         style: GoogleFonts.poppins(
                             fontSize: 14, fontWeight: FontWeight.w600)),
@@ -156,7 +148,6 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
                     ),
                     const SizedBox(height: 20),
 
-                    // ── Lista de solicitudes ─────────────────────────────
                     if (_solicitudes.isEmpty)
                       Center(
                         child: Padding(
@@ -184,7 +175,6 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
                         ),
                       )
                     else
-                    // Badge con el número de solicitudes pendientes
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -198,7 +188,7 @@ class _HomeConductorScreenState extends State<HomeConductorScreen> {
                           ..._solicitudes.map((s) => SolicitudCard(
                             solicitud: s,
                             onAceptar: () =>
-                                AppNavigation.goToSolicitudEntrante(context),
+                                AppNavigation.goToSolicitudEntrante(context, solicitudActiva: s, otras: _solicitudes),
                             onRechazar: () =>
                                 setState(() => _solicitudes.remove(s)),
                           )),

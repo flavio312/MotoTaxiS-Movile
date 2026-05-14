@@ -15,7 +15,6 @@ import 'package:viajeseguro/features/trip/presentation/page/active_trip_screen.d
 import 'package:viajeseguro/features/rating/presentation/page/rating_screen.dart';
 import 'package:viajeseguro/features/settings/presentation/page/settings_screen.dart';
 import 'package:viajeseguro/features/settings/presentation/page/privacy_screen.dart';
-import 'package:viajeseguro/features/profile/presentation/providers/profile_provider.dart';
 // --------CONDUCTOR-----------
 import '../../features/conductor/presentation/page/registro_conductor_screen.dart';
 import '../../features/conductor/presentation/page/jornada_conductor_screen.dart';
@@ -25,6 +24,7 @@ import '../../features/conductor/presentation/page/qr_conductor_screen.dart';
 import '../../features/conductor/presentation/page/historial_conductor_screen.dart';
 import '../../features/conductor/presentation/page/solicitud_entrante_screen.dart';
 import '../../features/conductor/presentation/page/viaje_conductor_screen.dart';
+import '../../features/conductor/data/models/solicitud_model.dart';
 // ------Propietario
 import '../../features/propietario/presentation/pages/registro_propietario_screen.dart';
 import '../../features/propietario/presentation/pages/home_propietario_screen.dart';
@@ -119,7 +119,19 @@ class AppRouter {
           GoRoute(
             path: RoutePaths.activeTrip,
             name: RouteNames.activeTrip,
-            builder: (context, state) => const ActiveTripScreen(),
+            builder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>;
+              final idServicio   = extra['idServicio'];
+              final latDestino   = extra['latDestino'];
+              final latOrigen    = extra['latOrigen'] ;
+              final lngDestino   = extra['lngDestino'];
+              final lngOrigen    = extra['lngOrigen'] ;
+              return ActiveTripScreen(idServicio: idServicio,
+                  latDestino: latDestino,
+                  latOrigen: latOrigen,
+                  lngDestino: lngDestino,
+                  lngOrigen: lngOrigen);
+            } ,
           ),
           GoRoute(
             path: RoutePaths.rating,
@@ -152,19 +164,39 @@ class AppRouter {
         builder: (context, state) => const JornadaConductorScreen(),
       ),
       GoRoute(
-        path:RoutePaths.homeConductor,
+        path: RoutePaths.homeConductor,
         name: RouteNames.homeConductor,
-        builder: (context, state) => const HomeConductorScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final idConductor = extra?['idConductor'] as int? ?? 0;
+          return HomeConductorScreen(idConductor: idConductor);
+        },
       ),
       GoRoute(
         path: RoutePaths.solicitudEntrante,
         name: RouteNames.solicitudEntrante,
-        builder: (context, state) => const SolicitudEntranteScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return SolicitudEntranteScreen(
+            solicitudActiva: extra['solicitudActiva'] as SolicitudModel,
+            otras:           (extra['otras'] as List<SolicitudModel>?) ?? [],
+          );
+        },
       ),
       GoRoute(
         path: RoutePaths.viajeConductor,
         name: RouteNames.viajeConductor,
-        builder: (context, state) => const ViajeConductorScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return ViajeConductorScreen(
+            idServicio:  extra['idServicio']  as int,
+            idConductor: extra['idConductor'] as int,
+            latOrigen:   extra['latOrigen'],
+            lngOrigen:   extra['lngOrigen'],
+            latDestino:  extra['latDestino'],
+            lngDestino:  extra['lngDestino'],
+          );
+        },
       ),
       GoRoute(
         path: RoutePaths.evaluarUsuario,
@@ -174,7 +206,11 @@ class AppRouter {
       GoRoute(
         path: RoutePaths.qrConductor,
         name: RouteNames.qrConductor,
-        builder: (context, state) => const QrConductorScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final idConductor = extra?['idConductor'] as int? ?? 0;
+          return QrConductorScreen(idConductor: idConductor);
+        }
       ),
       GoRoute(
         path: RoutePaths.historialConductor,

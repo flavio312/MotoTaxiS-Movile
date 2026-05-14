@@ -1,7 +1,8 @@
-class SolicitudEntity {
+import 'package:equatable/equatable.dart';
+
+class Solicitud extends Equatable {
   final int    idServicio;
   final int    idConductor;
-  final String conductor;
   final String tipoPaquete;
   final String origen;
   final String destino;
@@ -11,10 +12,9 @@ class SolicitudEntity {
   final String lngDestino;
   final String estado;
 
-  const SolicitudEntity({
+  const Solicitud({
     required this.idServicio,
     required this.idConductor,
-    required this.conductor,
     required this.tipoPaquete,
     required this.origen,
     required this.destino,
@@ -24,4 +24,18 @@ class SolicitudEntity {
     required this.lngDestino,
     this.estado = 'solicitado',
   });
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+    idServicio,
+    idConductor,
+    tipoPaquete,
+    origen,
+    destino,
+    latOrigen,
+    lngDestino,
+    latOrigen,
+    lngDestino,
+    estado,
+  ];
 }

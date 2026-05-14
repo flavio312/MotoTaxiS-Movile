@@ -7,6 +7,7 @@ class ConductorProvider extends ChangeNotifier {
 
   ConductorProvider({required this.registerConductorUseCase});
 
+  int? idConductor;
   bool _isLoading = false;
   String? _error;
 
@@ -24,12 +25,14 @@ class ConductorProvider extends ChangeNotifier {
     try {
       await registerConductorUseCase(
           conductor: conductor,
-          token: token);
+          token: token
+      );
+      idConductor = conductor.idConductor;
     } catch (e) {
       _error = e.toString();
+    }finally {
+      _isLoading = false;
+      notifyListeners();
     }
-
-    _isLoading = false;
-    notifyListeners();
   }
 }

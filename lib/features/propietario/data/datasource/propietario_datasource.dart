@@ -40,7 +40,6 @@ class PropietarioDatasource {
       },
     );
 
-    // ✅ response ya ES la lista directamente
     final List data = response as List;
 
     return data

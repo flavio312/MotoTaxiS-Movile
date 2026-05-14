@@ -5,6 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:viajeseguro/core/route/app_navigation.dart';
 import 'package:viajeseguro/features/profile/presentation/providers/profile_provider.dart';
 import 'package:viajeseguro/features/conductor/domain/entities/conductor.dart';
+import '../../data/models/solicitud_model.dart';
+import '../providers/servicio_provider.dart';
+import '../widgets/solicitud_card.dart';
 
 class JornadaConductorScreen extends StatefulWidget {
   const JornadaConductorScreen({super.key});
@@ -55,7 +58,6 @@ class _JornadaConductorScreenState extends State<JornadaConductorScreen> {
       throw ArgumentError("Formato de fecha no válido");
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +142,8 @@ class _JornadaConductorScreenState extends State<JornadaConductorScreen> {
                 SnackBar(content: Text(provider.error!)),
               );
             } else {
-              AppNavigation.goToHomeConductor(context);
+              final idConductor = context.read<ConductorProvider>().idConductor??0;
+              AppNavigation.goToHomeConductor(context, idConductor: idConductor);
             }
           },
           child: provider.isLoading ? const CircularProgressIndicator() : const Text("Guardar"),

@@ -9,7 +9,7 @@ import '../providers/servicio_provider.dart';
 import '../widgets/solicitud_card.dart';
 
 class SolicitudEntranteScreen extends StatefulWidget {
-  // La solicitud activa llega desde HomeConductorScreen al navegar
+
   final SolicitudModel solicitudActiva;
   final List<SolicitudModel> otras;
 
@@ -32,7 +32,6 @@ class _SolicitudEntranteScreenState extends State<SolicitudEntranteScreen> {
   @override
   void initState() {
     super.initState();
-    // Inicializar desde los parámetros — nunca null
     _solicitudActiva = widget.solicitudActiva;
     _otras = List.from(widget.otras);
   }
@@ -55,7 +54,7 @@ class _SolicitudEntranteScreenState extends State<SolicitudEntranteScreen> {
           final payload = Map<String, dynamic>.from(data as Map);
 
           // Las coords vienen como String desde tu modelo
-          /*AppNavigation.goToViajeConductor(
+          AppNavigation.goToViajeConductor(
             context,
             idServicio:  payload['idServicio']  as int,
             idConductor: payload['idConductor'] as int,
@@ -63,7 +62,7 @@ class _SolicitudEntranteScreenState extends State<SolicitudEntranteScreen> {
             lngOrigen:   payload['lngOrigen'].toString(),
             latDestino:  payload['latDestino'].toString(),
             lngDestino:  payload['lngDestino'].toString(),
-          );*/
+          );
         },
       );
 
@@ -87,7 +86,6 @@ class _SolicitudEntranteScreenState extends State<SolicitudEntranteScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // ── Top bar ─────────────────────────────────────────────────
             Container(
               padding:
               const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
@@ -97,9 +95,8 @@ class _SolicitudEntranteScreenState extends State<SolicitudEntranteScreen> {
                   Text('Solicitud entrante',
                       style: GoogleFonts.poppins(
                           fontSize: 16, fontWeight: FontWeight.w700)),
-                  // Ya no es nullable — viene del constructor
                   Text(
-                    _solicitudActiva.conductor,
+                    _solicitudActiva.idServicio.toString(),
                     style: GoogleFonts.poppins(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
@@ -117,7 +114,6 @@ class _SolicitudEntranteScreenState extends State<SolicitudEntranteScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ── Solicitud activa ─────────────────────────────────
                     Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
@@ -190,7 +186,7 @@ class _SolicitudEntranteScreenState extends State<SolicitudEntranteScreen> {
                                   label: 'Rechazar',
                                   color: Colors.red,
                                   onTap: () =>
-                                      AppNavigation.goToHomeConductor(context),
+                                      AppNavigation.goToHomeConductor(context, idConductor: _solicitudActiva.idConductor),
                                 ),
                               ),
                             ],

@@ -170,7 +170,7 @@ class _ViajeConductorScreenState extends State<ViajeConductorScreen> {
                       textColor: Colors.white,
                       onTap: () {
                         context.read<MapaProvider>().detenerTracking();
-                        AppNavigation.goToHomeConductor(context);
+                        AppNavigation.goToHomeConductor(context, idConductor: widget.idConductor);
                       },
                     ),
                     const SizedBox(height: 10),

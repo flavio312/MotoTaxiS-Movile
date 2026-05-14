@@ -4,7 +4,9 @@ import 'package:viajeseguro/core/route/app_navigation.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 
 class QrConductorScreen extends StatelessWidget {
-  const QrConductorScreen({super.key});
+  final idConductor;
+  const QrConductorScreen({super.key, required this.idConductor});
+
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,6 @@ class QrConductorScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // ── Header ──────────────────────────────
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Center(
@@ -44,13 +45,11 @@ class QrConductorScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  // ── Escaneame ─────────────────────
                   Text('Escaneame',
                       style: GoogleFonts.poppins(
                           fontSize: 20, fontWeight: FontWeight.w700)),
                   const SizedBox(height: 48),
 
-                  // ── Salir ─────────────────────────
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 60),
                     child: OutlinedButton(
@@ -60,7 +59,7 @@ class QrConductorScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10)),
                         minimumSize: const Size(120, 44),
                       ),
-                      onPressed: () => AppNavigation.goToHomeConductor(context),
+                      onPressed: () => AppNavigation.goToHomeConductor(context, idConductor: idConductor),
                       child: Text('Salir',
                           style: GoogleFonts.poppins(
                               fontSize: 15, color: AppColors.textPrimary,
@@ -94,27 +93,22 @@ class _QrPainter extends CustomPainter {
     final paint = Paint()..color = Colors.black;
     final double cell = size.width / 21;
 
-    // Patrón QR simplificado (esquinas + datos aleatorios)
     final pattern = [
-      // Esquina superior izquierda
       for (int r = 0; r < 7; r++)
         for (int c = 0; c < 7; c++)
           if (r == 0 || r == 6 || c == 0 || c == 6 || (r >= 2 && r <= 4 && c >= 2 && c <= 4))
             Offset(c.toDouble(), r.toDouble()),
 
-      // Esquina superior derecha
       for (int r = 0; r < 7; r++)
         for (int c = 14; c < 21; c++)
           if (r == 0 || r == 6 || c == 14 || c == 20 || (r >= 2 && r <= 4 && c >= 16 && c <= 18))
             Offset(c.toDouble(), r.toDouble()),
 
-      // Esquina inferior izquierda
       for (int r = 14; r < 21; r++)
         for (int c = 0; c < 7; c++)
           if (r == 14 || r == 20 || c == 0 || c == 6 || (r >= 16 && r <= 18 && c >= 2 && c <= 4))
             Offset(c.toDouble(), r.toDouble()),
 
-      // Datos simulados (centro)
       const Offset(9, 9), const Offset(10, 8), const Offset(11, 10),
       const Offset(8, 11), const Offset(12, 9), const Offset(9, 12),
       const Offset(13, 11), const Offset(10, 13), const Offset(7, 10),

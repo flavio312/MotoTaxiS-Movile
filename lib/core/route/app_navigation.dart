@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'route_names.dart';
+import '../../features/conductor/data/models/solicitud_model.dart';
 
 class AppNavigation {
   static void goToNamed(
@@ -81,14 +82,37 @@ class AppNavigation {
   static void goToJornadaConductor(BuildContext context) {
     context.goNamed(RouteNames.jornadaConductor);
   }
-  static void goToHomeConductor(BuildContext context) {
-    context.goNamed(RouteNames.homeConductor);
+  static void goToHomeConductor(BuildContext context, {required int idConductor}) {
+    context.goNamed(RouteNames.homeConductor,
+    extra: {'idConductor': idConductor},
+    );
   }
-  static void goToSolicitudEntrante(BuildContext context) {
-    context.goNamed(RouteNames.solicitudEntrante);
+  static void goToSolicitudEntrante(BuildContext context,{
+    required SolicitudModel solicitudActiva,
+    List<SolicitudModel> otras = const []
+  }) {
+    context.goNamed(RouteNames.solicitudEntrante,
+    extra: {
+      'solicitudActiva':solicitudActiva,
+      'otras':otras,
+    },);
   }
-  static void goToViajeConductor(BuildContext context) {
-    context.goNamed(RouteNames.viajeConductor);
+  static void goToViajeConductor(BuildContext context,{
+    required int    idServicio,
+    required int    idConductor,
+    required String latOrigen,
+    required String lngOrigen,
+    required String latDestino,
+    required String lngDestino,
+  }) {
+    context.goNamed(RouteNames.viajeConductor,
+    extra: {
+      'idServicio': idServicio,
+      'idConductor': idConductor,
+      'latOrigen': latOrigen,
+      'lngOrigen': lngOrigen,
+      'latDestino': latDestino,
+      'lngDestino': lngDestino,});
   }
   static void goToEvaluarUsuario(BuildContext context) {
     context.goNamed(RouteNames.evaluarUsuario);

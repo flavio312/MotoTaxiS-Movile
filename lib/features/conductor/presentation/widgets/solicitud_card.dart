@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:viajeseguro/core/theme/app_theme.dart';
 import '../../data/models/solicitud_model.dart';
 
-// ── Tarjeta de solicitud reutilizable ─────────────────────────────────────
 class SolicitudCard extends StatelessWidget {
   final SolicitudModel solicitud;
   final VoidCallback onAceptar;
@@ -28,11 +27,10 @@ class SolicitudCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Nombre conductor + tipo
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(solicitud.conductor,
+              Text(solicitud.idConductor.toString(),
                   style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600)),
               Text(solicitud.tipoPaquete,
                   style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textSecondary)),

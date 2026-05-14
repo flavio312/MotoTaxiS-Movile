@@ -1,3 +1,4 @@
+import 'package:viajeseguro/features/conductor/data/models/qr_conductor_model.dart';
 import '../../../../core/network/http_client.dart';
 
 class ConductorDatasource {
@@ -16,5 +17,15 @@ class ConductorDatasource {
         'Authorization': 'Bearer $token',
       },
     );
+  }
+
+  Future<Map<String, dynamic>> getQrConductor(String token) async {
+   final response = await httpClient.get(
+       endpoint: '/usuarios/conductor/qr',
+       headers: {
+         'Authorization': 'Bearer $token'
+       },
+   );
+   return response as Map<String, dynamic>;
   }
 }

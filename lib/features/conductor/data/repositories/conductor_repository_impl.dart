@@ -1,3 +1,5 @@
+import 'package:viajeseguro/features/conductor/data/models/qr_conductor_model.dart';
+import '../../domain/entities/qr_conductor.dart';
 import '../models/conductor_model.dart';
 import '../../domain/repositories/conductor_repository.dart';
 import '../datasource/conductor_datasource.dart';
@@ -19,5 +21,11 @@ class ConductorRepositoryImpl implements ConductorRepository{
         data: model.toJson(),
         token: token,
     );
+  }
+
+  @override
+  Future<QrConductorEntity> getQrConductor(String token) async {
+    final result = await datasource.getQrConductor(token);
+    return QrConductorModel.fromJson(result).toEntity();
   }
 }
