@@ -1,7 +1,7 @@
 import 'package:viajeseguro/features/conductor/data/models/qr_conductor_model.dart';
 import '../../../../core/network/http_client.dart';
 
-class ConductorDatasource {
+abstract class ConductorDatasource {
   final HttpClient httpClient;
 
   ConductorDatasource({required this.httpClient});
